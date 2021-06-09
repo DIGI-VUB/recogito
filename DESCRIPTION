@@ -1,0 +1,17 @@
+Package: recogito
+Title: Interactive Annotation of Text
+Version: 0.1
+Authors@R: c(
+    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jan.wijffels@vub.be'), 
+    person('Vrije Universiteit Brussel - DIGI: Brussels Platform for Digital Humanities', role = 'cph'),
+    person('Pelagios Network', role = 'cph', comment = "code in inst/htmlwidgets/lib"))
+Description: Interactive Annotation of Text. For annotating text with entities and the relations between them.
+License: BSD_3_clause + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+Suggests: 
+    shiny
+Imports: 
+    htmlwidgets, 
+    htmltools, 
+    jsonlite
