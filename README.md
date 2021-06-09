@@ -1,36 +1,31 @@
 # recogito
 
-The **recogito** R package provides a htmlwidget library for [recogito-js](https://github.com/recogito/recogito-js) .
+Annotate text with your tags
 
-The package allows to annotate text using TAGS and RELATIONS.
+- This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) .
+- The package allows to annotate text using **tags and relations between these tags**. A common use case is for entity labelling and entity linking
 
 
-### Installation
+### Example
 
-- For installing the development version of this package
+> Simple example in RStudio
 
-```
-remotes::install_github("DIGI-VUB/recogito")
-```
+![](tools/example-basic.png)
 
-## Example
-
-- Simple example in RStudio
-
-```
+```r
 library(recogito)
 txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
 x   <- recogito(text = txt)
 x
 ```
 
-![](tools/example-basic.png)
-
-- Example with Shiny
+> Example with Shiny
 
 ![](tools/example-shiny.gif)
 
-```
+> With the following code
+
+```r
 library(shiny)
 library(recogito)
 txt <- "Tell me, O muse, of that ingenious hero who travelled far and wide after he had sacked
@@ -79,6 +74,13 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
+### Installation
+
+- For installing the package
+
+```
+remotes::install_github("DIGI-VUB/recogito")
+```
 
 ### DIGI
 
