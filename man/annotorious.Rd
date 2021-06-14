@@ -19,7 +19,7 @@ annotorious(
 
 \item{src}{character string with the image/url to annotate}
 
-\item{tags}{character vector of possible tags}
+\item{tags}{character vector of possible labels you want to use}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 
@@ -41,4 +41,5 @@ url <- paste("https://upload.wikimedia.org/",
              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
              sep = "")
 annotorious(src = url)
+annotorious(src = url, tags = c("Image", "Text", "Other"))
 }

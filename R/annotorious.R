@@ -2,7 +2,7 @@
 #' @description Functionality to label areas in images
 #' @param inputId The input slot that will be used to access the value
 #' @param src character string with the image/url to annotate
-#' @param tags character vector of possible tags
+#' @param tags character vector of possible labels you want to use
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
@@ -17,6 +17,7 @@
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
 #'              sep = "")
 #' annotorious(src = url)
+#' annotorious(src = url, tags = c("Image", "Text", "Other"))
 annotorious <- function(inputId = "annotations",
                         src,
                         tags = c("Cat", "Dog", "Person", "Other"),
