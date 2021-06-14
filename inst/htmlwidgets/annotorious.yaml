@@ -1,0 +1,10 @@
+dependencies:
+  - name: annotorious
+    version: 2.4.1
+    src: htmlwidgets/lib/annotorious-2.4.1
+    stylesheet:
+      - annotorious.min.css
+    script:
+      - annotorious.min.js
+      - annotorious-shape-labels.min.js
+      - annotorious-toolbar.min.js
