@@ -125,7 +125,7 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #'   })
 #'   output$annotation_result <- renderPrint({
 #'     if(length(input$annotations) > 0){
-#'       x <- read_recogito_annotations(input$annotations)
+#'       x <- read_recogito(input$annotations)
 #'       x
 #'     }
 #'   })
@@ -165,6 +165,7 @@ renderRecogitotagsonly <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @description Parse recogito annotations
 #' @param x a character string with json as returned by the htmlwidget
 #' @param text a character string with the text which was used in \code{x}
+#' @return a data.frame with annotations
 #' @export
 #' @examples
 #' x <- '[
@@ -189,8 +190,8 @@ renderRecogitotagsonly <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' "id":"#d7050196-2537-42bf-9d1b-a3f9e4c9fbc6"
 #' }
 #' ]'
-#' read_recogito_annotations(x)
-read_recogito_annotations <- function(x, text = character()){
+#' read_recogito(x)
+read_recogito <- function(x, text = character()){
   if(is.character(x)){
     x       <- jsonlite::fromJSON(x, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE, flatten = FALSE)
     label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))

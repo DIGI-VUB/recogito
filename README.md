@@ -1,16 +1,41 @@
 # recogito
 
-Annotate text with your tags
+Annotate text with your tags / Annotate areas of interests in images with your own labels
 
-- This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) .
-- The package allows to annotate text using **tags and relations between these tags**. A common use case is for entity labelling and entity linking
+- This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) and  [annotorious](https://github.com/recogito/annotorious).
+- The package allows to annotate text using **tags and relations between these tags**. 
+    - A common use case is for entity labelling and entity linking
+- Next you can use the package to **annotate areas of interest (rectangles / polygons) in images** with specific labels
+    - Handy for quick data preparation of images
 
+### Example on Image Annotation
 
-### Example
+![](tools/example-annotorious-shiny.gif)
+
+```r
+library(shiny)
+library(recogito)
+url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
+ui  <- fluidPage(annotoriousOutput(outputId = "anno"),
+                 tags$hr(),
+                 tags$h3("Results"),
+                 verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  output$anno <- renderAnnotorious({
+    annotorious("results", tags = c("IMAGE", "TEXT"), src = url)
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$results)
+  })
+}
+shinyApp(ui, server)
+```
+
+### Example on Text Annotation
 
 > Simple example in RStudio
 
-![](tools/example-basic.png)
+![](tools/example-recogito-basic.png)
 
 ```r
 library(recogito)
@@ -21,7 +46,7 @@ x
 
 > Example with Shiny
 
-![](tools/example-shiny.gif)
+![](tools/example-recogito-shiny.gif)
 
 > With the following code
 
@@ -66,7 +91,7 @@ server <- function(input, output) {
   })
   output$annotation_result <- renderPrint({
     if(length(input$annotations) > 0){
-      x <- read_recogito_annotations(input$annotations)
+      x <- read_recogito(input$annotations)
       x
     }
   })

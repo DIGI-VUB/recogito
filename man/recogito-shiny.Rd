@@ -50,7 +50,7 @@ server <- function(input, output) {
   })
   output$annotation_result <- renderPrint({
     if(length(input$annotations) > 0){
-      x <- read_recogito_annotations(input$annotations)
+      x <- read_recogito(input$annotations)
       x
     }
   })

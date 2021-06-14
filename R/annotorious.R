@@ -90,7 +90,7 @@ widget_html.annotorious <- function(id, style, class, ...){
 #'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
 #'   })
 #'   output$annotation_result <- renderPrint({
-#'     read_annotorious_annotations(input$annotations)
+#'     read_annotorious(input$annotations)
 #'   })
 #' }
 #' shinyApp(ui, server)
@@ -113,6 +113,7 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @param x a character string with json as returned by the htmlwidget
 #' @param src a character string with the image src which was used in \code{x}
 #' @export
+#' @return a data.frame with annotations
 #' @examples
 #' url <- paste("https://upload.wikimedia.org/",
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
@@ -137,8 +138,28 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
 #'   "value":"xywh=pixel:46,5.523437976837158,371,239.99999952316284"}},
 #' "@context":"http://www.w3.org/ns/anno.jsonld",
 #' "id":"#50035dda-c62b-4f30-bf95-1879d60288a5"}]'
-#' anno <- read_annotorious_annotations(x, src = url)
+#' anno <- read_annotorious(x, src = url)
 #' anno
+#'
+#' if(require(magick)){
+#' library(magick)
+#' img  <- image_read(url)
+#' area <- head(anno, n = 1)
+#' image_crop(img, geometry_area(x = area$x, y = area$y,
+#'                               width = area$width, height = area$height))
+#' area <- subset(anno, type == "RECTANGLE")
+#' allrectangles <- Map(
+#'   x      = area$x,
+#'   y      = area$y,
+#'   width  = area$width,
+#'   height = area$height,
+#'   f = function(x, y, width, height){
+#'     image_crop(img, geometry_area(x = x, y = y, width = width, height = height))
+#' })
+#' allrectangles <- do.call(c, allrectangles)
+#' allrectangles
+#' }
+#'
 #'
 #' x <- '[
 #' {
@@ -162,25 +183,36 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
 #'   "@context":"http://www.w3.org/ns/anno.jsonld",
 #'   "id":"#8bf0a557-c847-4a07-91bc-68a98c499615"}]'
 #' x    <- gsub(x, pattern = "\n", replacement = "")
-#' anno <- read_annotorious_annotations(x, src = url)
+#' anno <- read_annotorious(x, src = url)
 #' anno
 #' anno$polygon
-read_annotorious_annotations <- function(x, src = character()){
+#'
+#' if(require(opencv)){
+#' library(opencv)
+#' img  <- ocv_read(url)
+#' area <- subset(anno, type == "POLYGON")
+#' ocv_polygon(img, pts = area$polygon[[1]])
+#' }
+read_annotorious <- function(x, src = character()){
   if(is.character(x)){
     x <- jsonlite::fromJSON(x, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE, flatten = FALSE)
+    label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
+    tags    <- lapply(label, FUN = function(x) x$value[x$purpose %in% "tagging"])
+    comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
     x <- data.frame(id = sapply(x, FUN = function(x) x$id),
                     type = sapply(x, FUN = function(x){
                       x <- x$target[[1]]$value
                       ifelse(grepl(x, pattern = "xywh=pixel"), "RECTANGLE",
                              ifelse(grepl(x, pattern = "polygon points"), "POLYGON", NA))
                     }),
-                    label = sapply(x, FUN = function(x) x$body[[1]]$value),
+                    label = I(tags),
+                    comment = I(comment),
                     content = sapply(x, FUN = function(x) x$target[[1]]$value), stringsAsFactors = FALSE)
     x$xywh <- strsplit(x$content, split = ":")
     x$xywh <- sapply(x$xywh, FUN = function(x) x[length(x)])
     x$xywh <- strsplit(x$xywh, split = ",")
     x$x <- NA_real_
-    x$u <- NA_real_
+    x$y <- NA_real_
     x$width <- NA_real_
     x$height <- NA_real_
     idx <- which(x$type == "RECTANGLE")
@@ -193,7 +225,7 @@ read_annotorious_annotations <- function(x, src = character()){
     if(length(idx) > 0){
       x$polygon[idx] <- sapply(strsplit(x$content[idx], split = '"'), FUN = function(x) x[2])
     }
-    out <- x[, c("id", "type", "label", "x", "y", "width", "height", "polygon"), drop = FALSE]
+    out <- x[, c("id", "type", "label", "comment", "x", "y", "width", "height", "polygon"), drop = FALSE]
     out$polygon <- strsplit(out$polygon, split = " ")
     out$polygon <- lapply(out$polygon, FUN = function(x){
       if(all(is.na(x))){
@@ -206,9 +238,9 @@ read_annotorious_annotations <- function(x, src = character()){
       x
     })
   }else{
-    out <- data.frame(id = character(), type = character(), label = character(), x = numeric(), y = numeric(), width = numeric(), height = numeric(), polygon = list(), stringsAsFactors = FALSE)
+    out <- data.frame(id = character(), type = character(), label = I(list()), comment = I(list()), x = numeric(), y = numeric(), width = numeric(), height = numeric(), polygon = I(list()), stringsAsFactors = FALSE)
   }
-  out <- out[, c("id", "type", "label", "x", "y", "width", "height", "polygon"), drop = FALSE]
+  out <- out[, c("id", "type", "label", "comment", "x", "y", "width", "height", "polygon"), drop = FALSE]
   attr(out, "src") <- src
   out
 }

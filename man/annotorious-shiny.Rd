@@ -44,7 +44,7 @@ server <- function(input, output) {
     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
   })
   output$annotation_result <- renderPrint({
-    read_annotorious_annotations(input$annotations)
+    read_annotorious(input$annotations)
   })
 }
 shinyApp(ui, server)

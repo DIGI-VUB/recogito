@@ -2,8 +2,8 @@
 
 export(annotorious)
 export(annotoriousOutput)
-export(read_annotorious_annotations)
-export(read_recogito_annotations)
+export(read_annotorious)
+export(read_recogito)
 export(recogito)
 export(recogitoOutput)
 export(recogitotagsonlyOutput)
