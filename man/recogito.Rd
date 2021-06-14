@@ -36,7 +36,7 @@ recogito(
 \item{dependencies}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 }
 \description{
-Functionality to
+Functionality to tag text with entities and relations between these
 }
 \examples{
 txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"

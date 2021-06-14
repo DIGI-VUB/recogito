@@ -1,5 +1,5 @@
 #' @title Annotate text with tags and relations
-#' @description Functionality to
+#' @description Functionality to tag text with entities and relations between these
 #' @param inputId The input slot that will be used to access the value
 #' @param text character string with the text to annotate
 #' @param type either 'relations' or 'tags' in order to label relations between tags or only plain tags
@@ -67,7 +67,7 @@ recogito <- function(inputId = "annotations",
 
 widget_html.recogito <- function(id, style, class, ...){
   el <- htmltools::tags$div(
-    id = "outer-container", style = "position:relative;",
+    id = sprintf("%s-outer-container", id), style = "position:relative;",
     htmltools::tags$div(
       id = sprintf("%s-content", id), class = "plaintext", style = "max-width:920px;font-family:'Lato', sans-serif;font-size:17px;line-height:27px;",
       htmltools::tags$button(id = sprintf("%s-toggle", id), "MODE: ANNOTATION"),
@@ -109,6 +109,30 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #'   is useful if you want to save an expression in a variable.
 #' @name recogito-shiny
 #' @export
+#' @examples
+#' if(interactive()){
+#'
+#' library(shiny)
+#' library(recogito)
+#' txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
+#' ui <- fluidPage(recogitoOutput(outputId = "annotation_text"),
+#'                 tags$hr(),
+#'                 tags$h3("Results"),
+#'                 verbatimTextOutput(outputId = "annotation_result"))
+#' server <- function(input, output) {
+#'   output$annotation_text <- renderRecogitotagsonly({
+#'     recogito("annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
+#'   })
+#'   output$annotation_result <- renderPrint({
+#'     if(length(input$annotations) > 0){
+#'       x <- read_recogito_annotations(input$annotations)
+#'       x
+#'     }
+#'   })
+#' }
+#' shinyApp(ui, server)
+#'
+#' }
 recogitoOutput <- function(outputId, width = '100%', height = '400px'){
   htmlwidgets::shinyWidgetOutput(outputId, name = 'recogito', width, height, package = 'recogito')
 }
