@@ -34,3 +34,28 @@ is useful if you want to save an expression in a variable.}
 Output and render functions for using recogito within Shiny
 applications and interactive Rmd documents.
 }
+\examples{
+if(interactive()){
+
+library(shiny)
+library(recogito)
+txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
+ui <- fluidPage(recogitoOutput(outputId = "annotation_text"),
+                tags$hr(),
+                tags$h3("Results"),
+                verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  output$annotation_text <- renderRecogitotagsonly({
+    recogito("annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
+  })
+  output$annotation_result <- renderPrint({
+    if(length(input$annotations) > 0){
+      x <- read_recogito_annotations(input$annotations)
+      x
+    }
+  })
+}
+shinyApp(ui, server)
+
+}
+}
