@@ -3,6 +3,13 @@ This R package is distributed under the BSD-3 license.
 The package also includes 3rd party open source software components and data. The following is a list of these components. The full copies of the license agreements of these components are included below.
 
 ------------------------------------------------------------------------------------------------------
+- file inst/examples/Pamphlet_dutch_tulipomania_1637.jpg
+  Based on https://nl.wikipedia.org/wiki/Bestand:Pamphlet_dutch_tulipomania_1637.jpg
+------------------------------------------------------------------------------------------------------
+
+Image file in the Public Domain
+
+------------------------------------------------------------------------------------------------------
 - recogito-js (Files at inst/htmlwidgets/lib/recogito-js-1.1.0
   Based on release 1.2.0 https://github.com/recogito/recogito-js/releases/tag/v1.2.0
 ------------------------------------------------------------------------------------------------------

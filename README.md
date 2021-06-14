@@ -101,11 +101,15 @@ shinyApp(ui, server)
 
 ### Installation
 
-- For installing the package
+- For regular users, install the package from your local CRAN mirror `install.packages("recogito")`
+- For installing the development version of this package: `remotes::install_github("DIGI-VUB/recogito")`
+
+Look to documentation of the functions
 
 ```
-remotes::install_github("DIGI-VUB/recogito")
+help(package = "recogito")
 ```
+
 
 ### DIGI
 
