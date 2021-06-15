@@ -110,7 +110,7 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #' @name recogito-shiny
 #' @export
 #' @examples
-#' if(interactive()){
+#' if(interactive() && require(shiny)){
 #'
 #' library(shiny)
 #' library(recogito)

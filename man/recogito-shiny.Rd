@@ -35,7 +35,7 @@ Output and render functions for using recogito within Shiny
 applications and interactive Rmd documents.
 }
 \examples{
-if(interactive()){
+if(interactive() && require(shiny)){
 
 library(shiny)
 library(recogito)

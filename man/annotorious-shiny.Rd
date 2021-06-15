@@ -29,7 +29,7 @@ Output and render functions for using annotorious within Shiny
 applications and interactive Rmd documents.
 }
 \examples{
-if(interactive()){
+if(interactive() && require(shiny)){
 library(shiny)
 library(recogito)
 url <- paste("https://upload.wikimedia.org/",

@@ -76,7 +76,7 @@ widget_html.annotorious <- function(id, style, class, ...){
 #' @name annotorious-shiny
 #' @export
 #' @examples
-#' if(interactive()){
+#' if(interactive() && require(shiny)){
 #' library(shiny)
 #' library(recogito)
 #' url <- paste("https://upload.wikimedia.org/",
