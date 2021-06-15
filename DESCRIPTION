@@ -9,6 +9,7 @@ Description: Annotate text with entities and the relations between them. Annotat
     Providing 'htmlwidgets' bindings to the 'recogito' <https://github.com/recogito/recogito-js> and 'annotorious' <https://github.com/recogito/annotorious> libraries.
 License: BSD_3_clause + file LICENSE
 Encoding: UTF-8
+URL: https://github.com/DIGI-VUB/recogito
 RoxygenNote: 7.1.1
 Suggests: 
     shiny,
