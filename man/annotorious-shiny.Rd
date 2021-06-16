@@ -24,6 +24,11 @@ string and have \code{'px'} appended.}
 \item{quoted}{Is \code{expr} a quoted expression (with \code{quote()})? This
 is useful if you want to save an expression in a variable.}
 }
+\value{
+An output element for use in a Shiny user interface.\cr
+Consisting of a toggle button to switch between rectangle / polygon mode (id: \code{outputId}\code{-toggle}) and
+the html-widget (id: \code{outputId}) which contains an image (id: \code{outputId}\code{-img})
+}
 \description{
 Output and render functions for using annotorious within Shiny
 applications and interactive Rmd documents.
@@ -50,4 +55,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 
 }
+
+
+annotoriousOutput(outputId = "anno")
 }

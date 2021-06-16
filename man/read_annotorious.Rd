@@ -12,7 +12,8 @@ read_annotorious(x, src = character())
 \item{src}{a character string with the image src which was used in \code{x}}
 }
 \value{
-a data.frame with annotations
+a data.frame with annotations with columns: id, type, label, comment, x, y, width, height, polygon
+and an attribute \code{src} with the provided \code{src}
 }
 \description{
 Parse annotorious annotations

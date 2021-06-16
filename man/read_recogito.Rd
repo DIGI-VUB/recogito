@@ -12,7 +12,8 @@ read_recogito(x, text = character())
 \item{text}{a character string with the text which was used in \code{x}}
 }
 \value{
-a data.frame with annotations
+a data.frame with annotations with columns: id, type, label, chunk_text, chunk_start, chunk_end, relation_from, relation_to, chunk_comment
+and an attribute \code{text} with the provided \code{text}
 }
 \description{
 Parse recogito annotations

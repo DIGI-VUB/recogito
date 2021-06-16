@@ -7,6 +7,10 @@
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param dependencies passed on to \code{\link[htmlwidgets]{createWidget}}
+#' @return An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
+#' that will intelligently print itself into HTML in a variety of contexts including the R console,
+#' within R Markdown documents, and within Shiny output bindings.
+#' @seealso \code{\link{annotorious-shiny}}
 #' @export
 #' @examples
 #' url <- "https://www.w3schools.com/images/picture.jpg"
@@ -74,6 +78,9 @@ widget_html.annotorious <- function(id, style, class, ...){
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #' @name annotorious-shiny
+#' @return An output element for use in a Shiny user interface.\cr
+#' Consisting of a toggle button to switch between rectangle / polygon mode (id: \code{outputId}\code{-toggle}) and
+#' the html-widget (id: \code{outputId}) which contains an image (id: \code{outputId}\code{-img})
 #' @export
 #' @examples
 #' if(interactive() && require(shiny)){
@@ -97,6 +104,9 @@ widget_html.annotorious <- function(id, style, class, ...){
 #' shinyApp(ui, server)
 #'
 #' }
+#'
+#'
+#' annotoriousOutput(outputId = "anno")
 annotoriousOutput <- function(outputId, width = '100%', height = '400px'){
   htmlwidgets::shinyWidgetOutput(outputId, 'annotorious', width, height, package = 'recogito')
 }
@@ -114,7 +124,8 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @param x a character string with json as returned by the htmlwidget
 #' @param src a character string with the image src which was used in \code{x}
 #' @export
-#' @return a data.frame with annotations
+#' @return a data.frame with annotations with columns: id, type, label, comment, x, y, width, height, polygon
+#' and an attribute \code{src} with the provided \code{src}
 #' @examples
 #' url <- paste("https://upload.wikimedia.org/",
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",

@@ -30,6 +30,12 @@ string and have \code{'px'} appended.}
 \item{quoted}{Is \code{expr} a quoted expression (with \code{quote()})? This
 is useful if you want to save an expression in a variable.}
 }
+\value{
+An output element for use in a Shiny user interface.\cr
+Consisting of a div of class plaintext which contains an optional toggle button to switch
+between annotation / relation mode (id: \code{outputId}\code{-toggle}) and
+the html-widget (id: \code{outputId})
+}
 \description{
 Output and render functions for using recogito within Shiny
 applications and interactive Rmd documents.
@@ -58,4 +64,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 
 }
+
+recogitoOutput(outputId = "annotation_text")
+recogitotagsonlyOutput(outputId = "annotation_text")
 }

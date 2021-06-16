@@ -9,6 +9,10 @@
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param dependencies passed on to \code{\link[htmlwidgets]{createWidget}}
+#' @return An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
+#' that will intelligently print itself into HTML in a variety of contexts including the R console,
+#' within R Markdown documents, and within Shiny output bindings.
+#' @seealso \code{\link{recogito-shiny}}
 #' @export
 #' @examples
 #' txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
@@ -108,6 +112,10 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #' @name recogito-shiny
+#' @return An output element for use in a Shiny user interface.\cr
+#' Consisting of a div of class plaintext which contains an optional toggle button to switch
+#' between annotation / relation mode (id: \code{outputId}\code{-toggle}) and
+#' the html-widget (id: \code{outputId})
 #' @export
 #' @examples
 #' if(interactive() && require(shiny)){
@@ -133,6 +141,9 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #' shinyApp(ui, server)
 #'
 #' }
+#'
+#' recogitoOutput(outputId = "annotation_text")
+#' recogitotagsonlyOutput(outputId = "annotation_text")
 recogitoOutput <- function(outputId, width = '100%', height = '400px'){
   htmlwidgets::shinyWidgetOutput(outputId, name = 'recogito', width, height, package = 'recogito')
 }
@@ -165,7 +176,8 @@ renderRecogitotagsonly <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @description Parse recogito annotations
 #' @param x a character string with json as returned by the htmlwidget
 #' @param text a character string with the text which was used in \code{x}
-#' @return a data.frame with annotations
+#' @return a data.frame with annotations with columns: id, type, label, chunk_text, chunk_start, chunk_end, relation_from, relation_to, chunk_comment
+#' and an attribute \code{text} with the provided \code{text}
 #' @export
 #' @examples
 #' x <- '[

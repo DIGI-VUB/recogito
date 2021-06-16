@@ -35,6 +35,11 @@ recogito(
 
 \item{dependencies}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 }
+\value{
+An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
+that will intelligently print itself into HTML in a variety of contexts including the R console,
+within R Markdown documents, and within Shiny output bindings.
+}
 \description{
 Functionality to tag text with entities and relations between these
 }
@@ -72,4 +77,7 @@ x   <- recogito(inputId = "annotations", txt,
                 tags = c("LOCATION", "TIME", "PERSON", "OTHER"),
                 dependencies = tagsetcss)
 x
+}
+\seealso{
+\code{\link{recogito-shiny}}
 }

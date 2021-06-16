@@ -29,6 +29,11 @@ annotorious(
 
 \item{dependencies}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 }
+\value{
+An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
+that will intelligently print itself into HTML in a variety of contexts including the R console,
+within R Markdown documents, and within Shiny output bindings.
+}
 \description{
 Functionality to label areas in images
 }
@@ -42,4 +47,7 @@ url <- paste("https://upload.wikimedia.org/",
              sep = "")
 annotorious(src = url)
 annotorious(src = url, tags = c("Image", "Text", "Other"))
+}
+\seealso{
+\code{\link{annotorious-shiny}}
 }
