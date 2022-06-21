@@ -1,7 +1,7 @@
 dependencies:
   - name: recogito
-    version: 1.1.0
-    src: htmlwidgets/lib/recogito-js-1.1.0
+    version: 1.7.0
+    src: htmlwidgets/lib/recogito-js-1.7.0
     stylesheet:
       - recogito.min.css
     script:

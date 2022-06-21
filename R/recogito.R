@@ -52,12 +52,13 @@ recogito <- function(inputId = "annotations",
                      text,
                      type = c("relations", "tags"),
                      tags = c("Location", "Person", "Place", "Other"),
+                     refresh = FALSE,
+                     annotations="{}",
                      mode = c("html", "pre"), width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
   mode <- match.arg(mode)
   x <- list(inputId = inputId, text = text, tags = tags, type = type,
-            #path = tempfile(pattern = "annotations_", fileext = ".json"),
-            mode = mode)
+            mode = mode,refresh=refresh,annotations=annotations)
   if(type == "relations"){
     htmlwidgets::createWidget(name = 'recogito', x,
                               width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
