@@ -44,7 +44,6 @@ HTMLWidgets.widget({
           //TODO: verify annotations exist and are correctly formatted
           //The tags can be misaligned when text contains multiple 
           //spaces or special characters. 
-          alert(x.annotations);
           if(x.annotations!="{}" & x.annotations!='[""]'){
             r.setAnnotations(JSON.parse(x.annotations)) 
           }
