@@ -58,6 +58,7 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("shinytest")
         shell: Rscript {0}
 
       - name: Run tests
