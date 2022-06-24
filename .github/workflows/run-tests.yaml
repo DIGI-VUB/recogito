@@ -59,6 +59,8 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("shinytest")
+          remotes::install_cran("shinyjs")
+          remotes::install_cran("shiny")
           remotes::install_cran("RSelenium")
           remotes::install_cran("testthat")
           shinytest::installDependencies()
