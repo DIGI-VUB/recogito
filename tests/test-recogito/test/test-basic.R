@@ -3,7 +3,7 @@ context("basic")
 library(RSelenium)
 library(testthat)
 
-rD <- rsDriver(browser="firefox", port=4551L, verbose=F)
+rD <- rsDriver(browser="phantomjs")
 remDr <- rD[["client"]]
 remDr$open(silent = TRUE)
 appURL <- "http://127.0.0.1:5448"
