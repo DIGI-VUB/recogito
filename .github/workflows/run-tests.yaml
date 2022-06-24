@@ -67,7 +67,7 @@ jobs:
       - name: Run tests
         shell: Rscript {0}
         run: |
-          shiny::runApp("./tests/test-rcogito") & 
+          shiny::runApp("./tests/test-recogito") & 
           sleep(10000)
           testthat::test_dir("./tests/test-recogito/test")
 
