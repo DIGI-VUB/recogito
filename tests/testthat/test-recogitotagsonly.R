@@ -1,4 +1,4 @@
-context("basic")
+context("recogitotagsonly")
 # This file is for testing application the in examples/recogito directory
 # The recogito example application needs to be running on port 5448
 # 
