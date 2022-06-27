@@ -1,9 +1,9 @@
-context("recogito-app-file")
+context("recogito-relations-file")
 # This file is for testing the applications in the inst/ directory.
 
 library(shinytest)
 
-test_that("recogitoapp works", {
+test_that("recogito relations works", {
   # Don't run these tests on the CRAN build servers
   skip_on_cran()
 

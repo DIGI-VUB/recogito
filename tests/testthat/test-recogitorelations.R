@@ -20,11 +20,17 @@ TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
 TAG_COMMENT <- "/html/body/div/div/div/div[2]/div/div[2]/div[1]/textarea"
 TAG_REPLY <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/textarea"
 
+TAG_INPUT2 <- '//*[@id="downshift-18-input"]'
 
 UPDATE_MODAL_OK <- "/html/body/div/div/div/div[2]/div/div[2]/div[4]/button[3]"
+
 UPDATE_TAG_LABEL <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li"
 UPDATE_TAG_DELETE <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li/span[2]/span"
 UPDATE_TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/div/div/input"
+
+TOGGLE_BUTTON <- '//*[@id="annotation_text-toggle"]'
+
+RELATION_TAG <- '//*[@id="downshift-30-input"]'
 
 
 rD <- rsDriver(browser = "firefox", port = 4545L, verbose = FALSE)
@@ -192,6 +198,84 @@ test_that("tagging annotations update", {
 
   expect_equal(results2, "1 1 1")
 })
+
+test_that("relations are created", {
+  # Don't run these tests on CRAN build servers
+  skip_on_cran()
+
+  remDr$navigate(appURL)
+  waiting(0.1, 0.5)
+  appTitle <- remDr$getTitle()[[1]]
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+
+  ## Creating First Tag
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(100, 100, webElement)
+  remDr$buttondown()
+  remDr$mouseMoveToLocation(190, 0)
+  remDr$buttonup()
+  waiting(0.1, 0.5, TAG_INPUT)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT)
+  taginput$sendKeysToElement(list("qwerty_tag"))
+  taginput$sendKeysToElement(list(key = "enter"))
+
+  tagcomment <- remDr$findElement(using = "xpath", TAG_COMMENT)
+  tagcomment$sendKeysToElement(list("qwerty_comment"))
+  tagcomment$sendKeysToElement(list(key = "enter"))
+
+  submit <- remDr$findElement(using = "xpath", MODAL_OK)
+  submit$clickElement()
+
+  ## Creating Second Tag
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(-150, -100, webElement)
+  remDr$buttondown()
+  remDr$mouseMoveToLocation(-190, 0)
+  remDr$buttonup()
+  waiting(0.1, 0.5, TAG_INPUT2)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT2)
+  taginput$sendKeysToElement(list("nerdy_tag"))
+  taginput$sendKeysToElement(list(key = "enter"))
+
+  submit <- remDr$findElement(using = "xpath", MODAL_OK)
+  submit$clickElement()
+  waiting(0.1, 0.5, ANNOTATION_RESULT)
+
+  ## Change to Relations Mode
+  togglebutton <- remDr$findElement(using = "xpath", TOGGLE_BUTTON)
+  togglebutton$clickElement()
+
+  ## Link Tag1 & Tag2
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(-150, -100, webElement)
+  remDr$buttondown()
+  remDr$buttonup()
+
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(150, 100, webElement)
+  remDr$buttondown()
+  remDr$buttonup()
+
+  relationtag <- remDr$findElement(using = "xpath", RELATION_TAG)
+  relationtag$sendKeysToElement(list("isLinked"))
+  relationtag$sendKeysToElement(list(key = "enter"))
+
+
+  results <- remDr$findElement(using = "xpath", ANNOTATION_RESULT)
+  parsed <- results$getElementText()
+  tag1 <- grep("nerdy", parsed[[1]])
+  tag2 <- grep("qwerty", parsed[[1]])
+  link <- grep("isLinked", parsed[[1]])
+  results <- paste(tag1, tag2, link, collapse = "")
+  expect_equal(results, "1 1 1")
+})
+
 
 
 remDr$close()

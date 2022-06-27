@@ -1,3 +1,5 @@
+
+
 txt       <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
 
 library(shiny)
@@ -29,13 +31,13 @@ font-weight: bold;
 "
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 tags$br(),
-                recogitoOutput(outputId = "annotation_text"),
+                recogitotagsonlyOutput(outputId = "annotation_text"),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 
 server <- function(input, output) {
-  output$annotation_text <- renderRecogito({
+  output$annotation_text <- renderRecogitotagsonly({
     recogito("annotations", text = txt, tags = tagset)
   })
   output$annotation_result <- renderPrint({
