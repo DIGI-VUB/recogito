@@ -26,6 +26,9 @@ UPDATE_TAG_DELETE <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li/span
 UPDATE_TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/div/div/input"
 TOGGLE_BUTTON <- '//*[@id="annotation_text-toggle"]'
 RELATION_TAG <- '//*[@id="downshift-30-input"]'
+## In version 1.7.1 of recogito-js these tags changed 
+RELATION_TAG_171 <- "/html/body/div/div/div/div[2]/div/div[1]/div/div/input"
+TAG_INPUT2_171 <-"/html/body/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
 
 
 rD <- rsDriver(browser = "firefox", port = 4545L, verbose = FALSE)
@@ -229,8 +232,8 @@ test_that("relations are created", {
   remDr$buttondown()
   remDr$mouseMoveToLocation(-190, 0)
   remDr$buttonup()
-  waiting(0.1, 0.5, TAG_INPUT2)
-  taginput <- remDr$findElement(using = "xpath", TAG_INPUT2)
+  waiting(0.1, 0.5, TAG_INPUT2_171)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT2_171)
   taginput$sendKeysToElement(list("nerdy_tag"))
   taginput$sendKeysToElement(list(key = "enter"))
 
@@ -257,7 +260,7 @@ test_that("relations are created", {
   remDr$buttondown()
   remDr$buttonup()
 
-  relationtag <- remDr$findElement(using = "xpath", RELATION_TAG)
+  relationtag <- remDr$findElement(using = "xpath", RELATION_TAG_171)
   relationtag$sendKeysToElement(list("isLinked"))
   relationtag$sendKeysToElement(list(key = "enter"))
 
