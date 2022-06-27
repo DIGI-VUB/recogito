@@ -130,7 +130,7 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' url <- paste("https://upload.wikimedia.org/",
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
 #'              sep = "")
-#' url <- system.file(package = "recogito", "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+#' url <- system.file(package = "recogito", "examples/annotorious", "Pamphlet_dutch_tulipomania_1637.jpg")
 #' x <- '[
 #' {
 #' "type":"Annotation",
