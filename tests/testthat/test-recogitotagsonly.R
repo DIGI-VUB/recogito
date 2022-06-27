@@ -1,10 +1,10 @@
-context("recogitorelations")
-# This file is for testing application the in examples/recogito directory
-# The recogito example application needs to be running on port 5447
+context("recogitotagsonly")
+# This file is for testing application the in examples/recogitotagsonly directory
+# The recogito example application needs to be running on port 5448
 #
 #   devtools::load_all()
-#   appDir = system.file(package="recogito","examples/recogito")
-#   runApp(appDir,port=5447L)
+#   appDir = system.file(package="recogito","examples/recogitotagsonly")
+#   runApp(appDir,port=5448L)
 
 library(RSelenium)
 library(testthat)
@@ -19,18 +19,16 @@ MODAL_OK <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/button[2]"
 TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
 TAG_COMMENT <- "/html/body/div/div/div/div[2]/div/div[2]/div[1]/textarea"
 TAG_REPLY <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/textarea"
-
-
 UPDATE_MODAL_OK <- "/html/body/div/div/div/div[2]/div/div[2]/div[4]/button[3]"
 UPDATE_TAG_LABEL <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li"
 UPDATE_TAG_DELETE <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li/span[2]/span"
 UPDATE_TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/div/div/input"
-
+PREDEFINED_TAG <- '//*[@id="downshift-1-item-0"]'
 
 rD <- rsDriver(browser = "firefox", port = 4545L, verbose = FALSE)
 remDr <<- rD[["client"]]
 remDr$open(silent = TRUE)
-appURL <- "http://127.0.0.1:5447"
+appURL <- "http://127.0.0.1:5448"
 
 # Wait until body of page is loaded or element is found
 waiting <- function(sleepmin, sleepmax, xpath = NULL) {
@@ -191,6 +189,28 @@ test_that("tagging annotations update", {
 
 
   expect_equal(results2, "1 1 1")
+})
+
+test_that("predefined tagsets appear", {
+  # Don't run these tests on CRAN build servers
+  skip_on_cran()
+
+  remDr$navigate(appURL)
+  waiting(0.1, 0.5)
+  appTitle <- remDr$getTitle()[[1]]
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(100, 100, webElement)
+  remDr$buttondown()
+  remDr$mouseMoveToLocation(190, 0)
+  remDr$buttonup()
+  waiting(0.1, 0.5, TAG_INPUT)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT)
+  taginput$sendKeysToElement(list("PER"))
+
+  predefined = remDr$findElement(using = "xpath", PREDEFINED_TAG)
+  text = predefined$getElementText()
+  expect_equal(as.character(text[[1]]), "PERSON")
 })
 
 
