@@ -110,6 +110,43 @@ Look to documentation of the functions
 help(package = "recogito")
 ```
 
+### Testing 
+Two example applications are provided for recogito
+
+-  inst/examples/recogito
+-  inst/examples/recogitotagsonly
+
+Before running the unit tests these two applications need to be running 
+on port 5447 and 5448 
+
+```
+library(shiny)
+library(devtools)
+devtools::load_all()
+appDir = system.file(package="recogito","examples/recogito")
+runApp(appDir,port=5447L)
+```
+
+In another R session 
+
+```
+library(shiny)
+library(devtools)
+devtools::load_all()
+appDir = system.file(package="recogito","examples/recogitotagsonly")
+runApp(appDir,port=5448L)
+```
+
+In a third R session with working directory in the recogito 
+package directory  you can run the selenium tests  
+
+```
+devtools::test()
+
+```
+
+See documentation from RSelenium for more details 
+
 
 ### DIGI
 
