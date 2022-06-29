@@ -1,3 +1,8 @@
+### CHANGES IN recogito VERSION 0.1.2
+
+- Updated recogito-js library to version 1.7.1
+- Added additional example shiny app for recogito relations
+
 ### CHANGES IN recogito VERSION 0.1.1
 
 - Extra documentation
