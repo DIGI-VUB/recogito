@@ -15,6 +15,14 @@ settled that he should go back to Ithaca; even then, however, when he was among 
 were not yet over; nevertheless all the gods had now begun to pity him except Neptune, who still persecuted
 him without ceasing and would not let him get home."
 
+## Function to generate new text for annotation 
+getText <- function(){
+  text = letters[floor(runif(1000)*25+1)]
+  text[sample(1:1000,250)]=" "
+  text=paste(text,collapse="")
+text
+}
+
 tagset    <- c("LOCATION", "TIME", "PERSON")
 tagstyles <- "
 .tag-PERSON {
@@ -28,6 +36,7 @@ font-weight: bold;
 }
 "
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
+                actionButton("nexttext","Next"),
                 tags$br(),
                 recogitoOutput(outputId = "annotation_text"),
                 tags$hr(),
@@ -44,5 +53,11 @@ server <- function(input, output) {
       x
     }
   })
+  observeEvent(input$nexttext, {
+    new_text = getText()
+    output$annotation_text <- renderRecogito({
+      recogito("annotations", text = new_text, tags = tagset, mode = "pre")
+    })
+  }) 
 }
 shinyApp(ui, server)
