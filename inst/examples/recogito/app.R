@@ -24,6 +24,7 @@ text
 }
 
 tagset    <- c("LOCATION", "TIME", "PERSON")
+rtagset    <- c("subject", "related", "isLinked")
 tagstyles <- "
 .tag-PERSON {
 color:red;
@@ -38,7 +39,7 @@ font-weight: bold;
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 actionButton("nexttext","Next"),
                 tags$br(),
-                recogitoOutput(outputId = "annotation_text",mode="PRE",tags=tagset),
+                recogitoOutput(outputId = "annotation_text",mode="PRE",tags=tagset,rtags=rtagset),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
