@@ -15,21 +15,22 @@ library(testthat)
 NEXT_TEXT <- '//*[@id="nexttext"]'
 ANNOTATION_TEXT <- '//*[@id="annotation_text"]'
 ANNOTATION_RESULT <- '//*[@id="annotation_result"]'
-MODAL_CANCEL <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/button[1]"
-MODAL_OK <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/button[2]"
-TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
-TAG_COMMENT <- "/html/body/div/div/div/div[2]/div/div[2]/div[1]/textarea"
-TAG_REPLY <- "/html/body/div/div/div/div[2]/div/div[2]/div[2]/textarea"
+MODAL_CANCEL <- "/html/body/div/div/div/div/div[2]/div/div[2]/div[3]/button[1]"
+MODAL_OK <- "/html/body/div/div/div/div/div[2]/div/div[2]/div[3]/button[2]"
+TAG_INPUT <- "/html/body/div/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
+TAG_COMMENT <- "/html/body/div/div/div/div/div[2]/div/div[2]/div[1]/textarea"
+TAG_REPLY <- "/html/body/div/div/div/div/div[2]/div/div[2]/div[2]/textarea" 
 TAG_INPUT2 <- '//*[@id="downshift-18-input"]'
-UPDATE_MODAL_OK <- "/html/body/div/div/div/div[2]/div/div[2]/div[4]/button[3]"
-UPDATE_TAG_LABEL <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li"
-UPDATE_TAG_DELETE <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/ul/li/span[2]/span"
-UPDATE_TAG_INPUT <- "/html/body/div/div/div/div[2]/div/div[2]/div[3]/div/div/input"
+UPDATE_MODAL_OK <-   "/html/body/div/div/div/div/div[2]/div/div[2]/div[4]/button[3]"
+UPDATE_TAG_LABEL <-  "/html/body/div/div/div/div/div[2]/div/div[2]/div[3]/ul/li"
+UPDATE_TAG_DELETE <- "/html/body/div/div/div/div//div[2]/div/div[2]/div[3]/ul/li/span[2]/span"
+UPDATE_TAG_INPUT <-  "/html/body/div/div/div//div/div[2]/div/div[2]/div[3]/div/div/input"
 TOGGLE_BUTTON <- '//*[@id="annotation_text-toggle"]'
 RELATION_TAG <- '//*[@id="downshift-30-input"]'
+
 ## In version 1.7.1 of recogito-js these tags changed 
-RELATION_TAG_171 <- "/html/body/div/div/div/div[2]/div/div[1]/div/div/input"
-TAG_INPUT2_171 <-"/html/body/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
+RELATION_TAG_171 <- "/html/body/div/div/div/div/div[2]/div/div[1]/div/div/input"
+TAG_INPUT2_171 <-   "/html/body/div/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
 
 WRAPPER<-'/html/body/div/div/div'
 

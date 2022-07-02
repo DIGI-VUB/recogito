@@ -1,7 +1,7 @@
 txt       <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
 
 library(shiny)
-library(recogito)
+#library(recogito)
 txt <- "Tell me, O muse, of that ingenious hero who travelled far and wide after he had sacked
 the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs
 he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely
@@ -38,14 +38,14 @@ font-weight: bold;
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 actionButton("nexttext","Next"),
                 tags$br(),
-                recogitoOutput(outputId = "annotation_text"),
+                recogitoOutput(outputId = "annotation_text",mode="PRE",tags=tagset),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 
 server <- function(input, output) {
   output$annotation_text <- renderRecogito({
-    recogito("annotations", text = txt, tags = tagset)
+    recogito("annotations", text = txt, refresh=TRUE)
   })
   output$annotation_result <- renderPrint({
     if(length(input$annotations) > 0){
@@ -56,7 +56,7 @@ server <- function(input, output) {
   observeEvent(input$nexttext, {
     new_text = getText()
     output$annotation_text <- renderRecogito({
-      recogito("annotations", text = new_text, tags = tagset, mode = "pre")
+      recogito("annotations", text = new_text,refresh=TRUE)
     })
   }) 
 }
