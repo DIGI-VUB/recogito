@@ -52,12 +52,13 @@ recogito <- function(inputId = "annotations",
                      text,
                      type = c("relations", "tags"),
                      tags = c("Location", "Person", "Place", "Other"),
+                     refresh = FALSE,
+                     annotations="{}",
                      mode = c("html", "pre"), width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
   mode <- match.arg(mode)
   x <- list(inputId = inputId, text = text, tags = tags, type = type,
-            #path = tempfile(pattern = "annotations_", fileext = ".json"),
-            mode = mode)
+            mode = mode,refresh=refresh,annotations=annotations)
   if(type == "relations"){
     htmlwidgets::createWidget(name = 'recogito', x,
                               width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
@@ -71,7 +72,7 @@ recogito <- function(inputId = "annotations",
 
 widget_html.recogito <- function(id, style, class, ...){
   el <- htmltools::tags$div(
-    id = sprintf("%s-outer-container", id), style = "position:relative;",
+    id = sprintf("%s-outer-container", id), style = "position:relative;", 
     htmltools::tags$div(
       id = sprintf("%s-content", id), class = "plaintext", style = "max-width:920px;font-family:'Lato', sans-serif;font-size:17px;line-height:27px;",
       htmltools::tags$button(id = sprintf("%s-toggle", id), "MODE: ANNOTATION"),
@@ -144,8 +145,10 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #'
 #' recogitoOutput(outputId = "annotation_text")
 #' recogitotagsonlyOutput(outputId = "annotation_text")
-recogitoOutput <- function(outputId, width = '100%', height = '400px'){
+recogitoOutput <- function(outputId, width = '100%', height = '400px',mode="html",tags=c("PERSON","TIME")){
+  htmltools::tags$div(id = paste0(outputId,"-data"), `init-data`=jsonlite::toJSON(list(mode=mode,tags=tags)),
   htmlwidgets::shinyWidgetOutput(outputId, name = 'recogito', width, height, package = 'recogito')
+  )
 }
 
 
@@ -204,7 +207,7 @@ renderRecogitotagsonly <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' ]'
 #' read_recogito(x)
 read_recogito <- function(x, text = character()){
-  if(is.character(x)){
+  if(is.character(x) & x!="[]"){
     x       <- jsonlite::fromJSON(x, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE, flatten = FALSE)
     label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
     target  <- lapply(x, FUN = function(x){
