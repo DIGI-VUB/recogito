@@ -52,6 +52,7 @@ recogito <- function(inputId = "annotations",
                      text,
                      type = c("relations", "tags"),
                      tags = c("Location", "Person", "Place", "Other"),
+                     rtags= c("isLinked"),
                      refresh = FALSE,
                      annotations="{}",
                      mode = c("html", "pre"), width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
@@ -145,8 +146,8 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #'
 #' recogitoOutput(outputId = "annotation_text")
 #' recogitotagsonlyOutput(outputId = "annotation_text")
-recogitoOutput <- function(outputId, width = '100%', height = '400px',mode="html",tags=c("PERSON","TIME")){
-  htmltools::tags$div(id = paste0(outputId,"-data"), `init-data`=jsonlite::toJSON(list(mode=mode,tags=tags)),
+recogitoOutput <- function(outputId, width = '100%', height = '400px',mode="html",tags=c("PERSON","TIME"),rtags=c("isLinked")){
+  htmltools::tags$div(id = paste0(outputId,"-data"), `init-data`=jsonlite::toJSON(list(mode=mode,tags=tags,rtags=rtags)),
   htmlwidgets::shinyWidgetOutput(outputId, name = 'recogito', width, height, package = 'recogito')
   )
 }

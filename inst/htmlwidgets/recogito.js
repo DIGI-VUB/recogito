@@ -14,6 +14,7 @@ HTMLWidgets.widget({
                             widgets:['COMMENT',
                                     { widget: 'TAG', vocabulary: initData.tags}
                                     ],
+                            relationVocabulary: initData.rtags,
                             readOnly: false                         
                           });
     var toggleModeBtn = document.getElementById(el.id.concat("-toggle"));

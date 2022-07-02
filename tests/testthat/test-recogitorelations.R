@@ -27,7 +27,7 @@ UPDATE_TAG_DELETE <- "/html/body/div/div/div/div//div[2]/div/div[2]/div[3]/ul/li
 UPDATE_TAG_INPUT <-  "/html/body/div/div/div//div/div[2]/div/div[2]/div[3]/div/div/input"
 TOGGLE_BUTTON <- '//*[@id="annotation_text-toggle"]'
 RELATION_TAG <- '//*[@id="downshift-30-input"]'
-
+PREDEFINED_RELATION_TAG <-'/html/body/div/div/div/div/div[2]/div/div[1]/div/ul/li'
 ## In version 1.7.1 of recogito-js these tags changed 
 RELATION_TAG_171 <- "/html/body/div/div/div/div/div[2]/div/div[1]/div/div/input"
 TAG_INPUT2_171 <-   "/html/body/div/div/div/div/div[2]/div/div[2]/div[2]/div/div/input"
@@ -274,6 +274,78 @@ test_that("relations are created", {
   link <- grep("isLinked", parsed[[1]])
   results <- paste(tag1, tag2, link, collapse = "")
   expect_equal(results, "1 1 1")
+})
+
+test_that("predefined relation tags are created", {
+  # Don't run these tests on CRAN build servers
+  skip_on_cran()
+
+  remDr$navigate(appURL)
+  waiting(0.1, 0.5)
+  appTitle <- remDr$getTitle()[[1]]
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+
+  ## Creating First Tag
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(100, 100, webElement)
+  remDr$buttondown()
+  remDr$mouseMoveToLocation(190, 0)
+  remDr$buttonup()
+  waiting(0.1, 0.5, TAG_INPUT)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT)
+  taginput$sendKeysToElement(list("qwerty_tag"))
+  taginput$sendKeysToElement(list(key = "enter"))
+
+  tagcomment <- remDr$findElement(using = "xpath", TAG_COMMENT)
+  tagcomment$sendKeysToElement(list("qwerty_comment"))
+  tagcomment$sendKeysToElement(list(key = "enter"))
+
+  submit <- remDr$findElement(using = "xpath", MODAL_OK)
+  submit$clickElement()
+
+  ## Creating Second Tag
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(-150, -100, webElement)
+  remDr$buttondown()
+  remDr$mouseMoveToLocation(-190, 0)
+  remDr$buttonup()
+  waiting(0.1, 0.5, TAG_INPUT2_171)
+  taginput <- remDr$findElement(using = "xpath", TAG_INPUT2_171)
+  taginput$sendKeysToElement(list("nerdy_tag"))
+  taginput$sendKeysToElement(list(key = "enter"))
+
+  submit <- remDr$findElement(using = "xpath", MODAL_OK)
+  submit$clickElement()
+  waiting(0.1, 0.5, ANNOTATION_RESULT)
+
+  ## Change to Relations Mode
+  togglebutton <- remDr$findElement(using = "xpath", TOGGLE_BUTTON)
+  togglebutton$clickElement()
+
+  ## Link Tag1 & Tag2
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(-150, -100, webElement)
+  remDr$buttondown()
+  remDr$buttonup()
+
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  remDr$mouseMoveToLocation(150, 100, webElement)
+  remDr$buttondown()
+  remDr$buttonup()
+
+  relationtag <- remDr$findElement(using = "xpath", RELATION_TAG_171)
+  relationtag$sendKeysToElement(list("isLin"))
+  waiting(0.1, 0.5, PREDEFINED_RELATION_TAG)
+  ptag = remDr$findElement(using="xpath",PREDEFINED_RELATION_TAG)
+  tagtext = as.character(ptag$getElementText())
+ 
+  expect_equal(tagtext, "isLinked")
 })
 
 
