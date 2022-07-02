@@ -10,8 +10,8 @@ The package also includes 3rd party open source software components and data. Th
 Image file in the Public Domain
 
 ------------------------------------------------------------------------------------------------------
-- recogito-js (Files at inst/htmlwidgets/lib/recogito-js-1.1.0
-  Based on release 1.2.0 https://github.com/recogito/recogito-js/releases/tag/v1.2.0
+- recogito-js (Files at inst/htmlwidgets/lib/recogito-js-1.7.0
+  Based on release 1.7.1 https://github.com/recogito/recogito-js/releases/tag/v1.7.1
 ------------------------------------------------------------------------------------------------------
 
 BSD 3-Clause License

@@ -1,6 +1,6 @@
 Package: recogito
 Title: Interactive Annotation of Text and Images
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jan.wijffels@vub.be'), 
     person('Vrije Universiteit Brussel - DIGI: Brussels Platform for Digital Humanities', role = 'cph'),
