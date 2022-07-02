@@ -1,7 +1,7 @@
 txt       <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
 
 library(shiny)
-#library(recogito)
+library(recogito)
 txt <- "Tell me, O muse, of that ingenious hero who travelled far and wide after he had sacked
 the famous town of Troy. Many cities did he visit, and many were the nations with whose manners and customs
 he was acquainted; moreover he suffered much by sea while trying to save his own life and bring his men safely
@@ -38,27 +38,55 @@ font-weight: bold;
 "
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 actionButton("nexttext","Next"),
+                actionButton("annotationmode","MODE: ANNOTATION"),
                 tags$br(),
-                recogitoOutput(outputId = "annotation_text",mode="PRE",tags=tagset,rtags=rtagset),
+                recogitoOutput(outputId = "annotation_text",
+                              mode="PRE",
+                              tags=tagset,
+                              rtags=rtagset,
+                              annotationMode='ANNOTATION'
+                              ),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 
-server <- function(input, output) {
+server <- function(input, output, session) {
+
+  mode <- reactiveValues(value = "ANNOTATION")
+
   output$annotation_text <- renderRecogito({
     recogito("annotations", text = txt, refresh=TRUE)
   })
+
   output$annotation_result <- renderPrint({
     if(length(input$annotations) > 0){
       x <- read_recogito(input$annotations)
       x
     }
   })
+
   observeEvent(input$nexttext, {
-    new_text = getText()
+    newText = getText()
     output$annotation_text <- renderRecogito({
-      recogito("annotations", text = new_text,refresh=TRUE)
+      recogito("annotations", text = newText,refresh=TRUE)
     })
-  }) 
+  })
+ 
+  observeEvent(input$annotationmode, {
+    if(mode$value=="ANNOTATION"){
+      output$annotation_text <- renderRecogito({
+        recogito("annotations", refresh=FALSE,annotationMode="RELATIONS")
+      })
+      updateActionButton(session,"annotationmode",label="MODE: RELATIONS")
+      mode$value <- "RELATIONS"
+    }else{
+      output$annotation_text <- renderRecogito({
+        recogito("annotations", refresh=FALSE,annotationMode="ANNOTATION")
+      })
+      updateActionButton(session,"annotationmode",label="MODE: ANNOTATION")
+      mode$value <- "ANNOTATION"
+    }
+  })
+ 
 }
 shinyApp(ui, server)

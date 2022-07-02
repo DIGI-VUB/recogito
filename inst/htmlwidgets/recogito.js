@@ -17,25 +17,6 @@ HTMLWidgets.widget({
                             relationVocabulary: initData.rtags,
                             readOnly: false                         
                           });
-    var toggleModeBtn = document.getElementById(el.id.concat("-toggle"));
-        //var annotationMode = 'ANNOTATION';
-        //r.setMode(annotationMode);
-        annotationMode = toggleModeBtn.innerHTML;
-        if (annotationMode === 'MODE: RELATIONS') {
-          annotationMode = 'RELATIONS';
-        } else  {
-          annotationMode = 'ANNOTATION';
-        }
-        toggleModeBtn.addEventListener('click', function() {
-          if (annotationMode === 'ANNOTATION') {
-            toggleModeBtn.innerHTML = 'MODE: RELATIONS';
-            annotationMode = 'RELATIONS';
-          } else  {
-            toggleModeBtn.innerHTML = 'MODE: ANNOTATION';
-            annotationMode = 'ANNOTATION';
-          }
-          r.setMode(annotationMode);
-        });
         function updateAnnotation(){
            Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
         }
@@ -44,13 +25,13 @@ HTMLWidgets.widget({
         }
     return {
       renderValue: function(x) {
-        el.innerText = x.text;
         r._environment.inputId=x.inputId;
-        r.off('updateAnnotation',updateAnnotation);
-        r.on('updateAnnotation', updateAnnotation);
-        r.off('createAnnotation',createAnnotation);
-        r.on('createAnnotation',createAnnotation);
         if(x.refresh){
+          el.innerText = x.text;
+          r.off('updateAnnotation',updateAnnotation);
+          r.on('updateAnnotation', updateAnnotation);
+          r.off('createAnnotation',createAnnotation);
+          r.on('createAnnotation',createAnnotation);
           r.clearAnnotations();
           //TODO: verify annotations exist and are correctly formatted
           //The tags can be misaligned when text contains multiple 
@@ -59,6 +40,13 @@ HTMLWidgets.widget({
             r.setAnnotations(JSON.parse(x.annotations)) 
           }
           Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
+        if(x.annotationMode === 'RELATIONS'){
+            r.setMode(x.annotationMode)
+        }else{
+          if(x.annotationMode === 'ANNOTATION'){
+            r.setMode(x.annotationMode)
+          }
         }
         //var toggleModeBtn = document.getElementById('toggle-mode');
         //r.refresh();

@@ -25,7 +25,7 @@ UPDATE_MODAL_OK <-   "/html/body/div/div/div/div/div[2]/div/div[2]/div[4]/button
 UPDATE_TAG_LABEL <-  "/html/body/div/div/div/div/div[2]/div/div[2]/div[3]/ul/li"
 UPDATE_TAG_DELETE <- "/html/body/div/div/div/div//div[2]/div/div[2]/div[3]/ul/li/span[2]/span"
 UPDATE_TAG_INPUT <-  "/html/body/div/div/div//div/div[2]/div/div[2]/div[3]/div/div/input"
-TOGGLE_BUTTON <- '//*[@id="annotation_text-toggle"]'
+TOGGLE_BUTTON <- '//*[@id="annotationmode"]'
 RELATION_TAG <- '//*[@id="downshift-30-input"]'
 PREDEFINED_RELATION_TAG <-'/html/body/div/div/div/div/div[2]/div/div[1]/div/ul/li'
 ## In version 1.7.1 of recogito-js these tags changed 
@@ -541,10 +541,12 @@ test_that("tagging relations created after text is updated", {
 
 
   ## Creating First Tag
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
   waiting(0.1, 0.5, ANNOTATION_TEXT)
   remDr$mouseMoveToLocation(100, 100, webElement)
   remDr$buttondown()
   remDr$mouseMoveToLocation(190, 0)
+  waiting(0.1,0.5)
   remDr$buttonup()
   waiting(0.1, 0.5, TAG_INPUT)
   taginput <- remDr$findElement(using = "xpath", TAG_INPUT)
@@ -565,6 +567,7 @@ test_that("tagging relations created after text is updated", {
   remDr$mouseMoveToLocation(-150, -100, webElement)
   remDr$buttondown()
   remDr$mouseMoveToLocation(-190, 0)
+  waiting(0.1,0.5)
   remDr$buttonup()
   waiting(0.1, 0.5, TAG_INPUT2_171)
   taginput <- remDr$findElement(using = "xpath", TAG_INPUT2_171)

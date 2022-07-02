@@ -49,17 +49,18 @@
 #'                 dependencies = tagsetcss)
 #' x
 recogito <- function(inputId = "annotations",
-                     text,
+                     text="",
                      type = c("relations", "tags"),
                      tags = c("Location", "Person", "Place", "Other"),
                      rtags= c("isLinked"),
                      refresh = FALSE,
+                     annotationMode="ANNOTATION",
                      annotations="{}",
                      mode = c("html", "pre"), width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
   mode <- match.arg(mode)
   x <- list(inputId = inputId, text = text, tags = tags, type = type,
-            mode = mode,refresh=refresh,annotations=annotations)
+            mode = mode, refresh = refresh, annotations = annotations, annotationMode = annotationMode)
   if(type == "relations"){
     htmlwidgets::createWidget(name = 'recogito', x,
                               width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
@@ -76,8 +77,6 @@ widget_html.recogito <- function(id, style, class, ...){
     id = sprintf("%s-outer-container", id), style = "position:relative;", 
     htmltools::tags$div(
       id = sprintf("%s-content", id), class = "plaintext", style = "max-width:920px;font-family:'Lato', sans-serif;font-size:17px;line-height:27px;",
-      htmltools::tags$button(id = sprintf("%s-toggle", id), "MODE: ANNOTATION"),
-      #tags$button(id = "toggle-mode", "MODE: ANNOTATION"),
       htmltools::tags$hr(),
       htmltools::tags$div(id = id, class = class)
     )
@@ -146,7 +145,7 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #'
 #' recogitoOutput(outputId = "annotation_text")
 #' recogitotagsonlyOutput(outputId = "annotation_text")
-recogitoOutput <- function(outputId, width = '100%', height = '400px',mode="html",tags=c("PERSON","TIME"),rtags=c("isLinked")){
+recogitoOutput <- function(outputId, width = '100%', height = '400px',mode="html",tags=c("PERSON","TIME"),rtags=c("isLinked"),annotationMode="ANNOTATION"){
   htmltools::tags$div(id = paste0(outputId,"-data"), `init-data`=jsonlite::toJSON(list(mode=mode,tags=tags,rtags=rtags)),
   htmlwidgets::shinyWidgetOutput(outputId, name = 'recogito', width, height, package = 'recogito')
   )

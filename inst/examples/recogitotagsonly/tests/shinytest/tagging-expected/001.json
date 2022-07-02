@@ -14,7 +14,10 @@
           "PERSON"
         ],
         "type": "relations",
-        "mode": "html"
+        "mode": "html",
+        "refresh": false,
+        "annotations": "{}",
+        "annotationMode": "ANNOTATION"
       },
       "evals": [
 
