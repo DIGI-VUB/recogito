@@ -38,13 +38,13 @@ HTMLWidgets.widget({
           //spaces or special characters.
           if(x.annotations!="{}" & x.annotations!='[""]'){
             r.setAnnotations(JSON.parse(x.annotations));
-            Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
           }
+          Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
         }
-          if(x.annotations!="{}" & x.annotations!='[""]'){
-            r.setAnnotations(JSON.parse(x.annotations));
-            Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
-          }
+        if(x.annotations!="{}" & x.annotations!='[""]'){
+          r.setAnnotations(JSON.parse(x.annotations));
+          Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
         if(x.annotationMode === 'RELATIONS'){
             r.setMode(x.annotationMode)
         }else{

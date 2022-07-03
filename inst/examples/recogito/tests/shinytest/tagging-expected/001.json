@@ -1,6 +1,7 @@
 {
   "input": {
     "annotationmode": 0,
+    "loadannotation": 0,
     "nexttext": 0
   },
   "output": {

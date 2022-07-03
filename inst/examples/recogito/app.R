@@ -42,8 +42,8 @@ annotation <- '[
 
 ## Function to generate new text for annotation 
 getText <- function(){
-  text = letters[floor(runif(1000)*25+1)]
-  text[sample(1:1000,250)]=" "
+  text = letters[floor(runif(2000)*25+1)]
+  text[sample(1:2000,500)]=" "
   text=paste(text,collapse="")
 text
 }
