@@ -47,7 +47,9 @@ appURL <- "http://127.0.0.1:5447"
 waiting <- function(sleepmin, sleepmax, xpath = NULL) {
   remDr <- get("remDr", envir = globalenv())
   webElemtest <- NULL
-  while (is.null(webElemtest)) {
+  iter = 0 
+  while (is.null(webElemtest) & iter < 300) {
+    iter = iter + 1
     if (is.null(xpath)) {
       webElemtest <- tryCatch(
         {
@@ -612,7 +614,8 @@ test_that("tagging relations created after text is updated", {
   remDr$mouseMoveToLocation(150, 100, webElement)
   remDr$buttondown()
   remDr$buttonup()
-
+  
+  waiting(0.1, 0.5, RELATION_TAG_171)
   relationtag <- remDr$findElement(using = "xpath", RELATION_TAG_171)
   relationtag$sendKeysToElement(list("isLinked"))
   relationtag$sendKeysToElement(list(key = "enter"))
