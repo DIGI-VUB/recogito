@@ -12,6 +12,8 @@ library(testthat)
 
 ## XPATHs for elements used during testing
 
+LOAD_ANNOTATION <- '//*[@id="loadannotation"]'
+LOADED_ANNOTATION <- '//*[@id="annotation_text"]/span[2]' 
 NEXT_TEXT <- '//*[@id="nexttext"]'
 ANNOTATION_TEXT <- '//*[@id="annotation_text"]'
 ANNOTATION_RESULT <- '//*[@id="annotation_result"]'
@@ -35,8 +37,10 @@ TAG_INPUT2_171 <-   "/html/body/div/div/div/div/div[2]/div/div[2]/div[2]/div/div
 WRAPPER<-'/html/body/div/div/div'
 
 rD <- rsDriver(browser = "firefox", port = 4545L, verbose = FALSE)
+
 remDr <<- rD[["client"]]
 remDr$open(silent = TRUE)
+remDr$setWindowSize(1028, 1028, winHand = "current") 
 appURL <- "http://127.0.0.1:5447"
 
 # Wait until body of page is loaded or element is found
@@ -85,9 +89,11 @@ test_that("tagging modal appears", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
 
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
   remDr$mouseMoveToLocation(100, 100, webElement)
   remDr$buttondown()
@@ -103,6 +109,7 @@ test_that("tagging annotations are created", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
 
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -136,6 +143,7 @@ test_that("tagging annotations are created", {
 test_that("tagging annotations update", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -202,7 +210,8 @@ test_that("tagging annotations update", {
 test_that("relations are created", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
-
+  
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -280,6 +289,7 @@ test_that("predefined relation tags are created", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
 
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -350,6 +360,8 @@ test_that("predefined relation tags are created", {
 
 
 test_that("tagging annotations cleared after update", {
+  
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -401,10 +413,12 @@ test_that("content wrappers aren't nested", {
   # in nested DOM objects being created 
   skip_on_cran()
 
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
   webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  waiting(1, 1, ANNOTATION_TEXT)
   wrappers = remDr$findElements(using="css",".r6o-content-wrapper")
   initialLength = length(wrappers)
   
@@ -428,6 +442,7 @@ test_that("tagging annotations modal opened only once after text is update", {
   ## createAnnotation and updateAnnotation events are only bound once to 
   ## the annotation_text events. Check that you only have to click "cancel" 
   ## once to make the update tag modal close  
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -525,6 +540,7 @@ test_that("tagging relations created after text is updated", {
   # Don't run these tests on CRAN build servers
   skip_on_cran()
 
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
   remDr$navigate(appURL)
   waiting(0.1, 0.5)
   appTitle <- remDr$getTitle()[[1]]
@@ -542,7 +558,7 @@ test_that("tagging relations created after text is updated", {
 
   ## Creating First Tag
   webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
-  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  waiting(1, 1, ANNOTATION_TEXT)
   remDr$mouseMoveToLocation(100, 100, webElement)
   remDr$buttondown()
   remDr$mouseMoveToLocation(190, 0)
@@ -563,7 +579,7 @@ test_that("tagging relations created after text is updated", {
   ## Creating Second Tag
   waiting(0.1, 0.5, ANNOTATION_TEXT)
   webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
-  waiting(0.1, 0.5, ANNOTATION_TEXT)
+  waiting(1, 1, ANNOTATION_TEXT)
   remDr$mouseMoveToLocation(-150, -100, webElement)
   remDr$buttondown()
   remDr$mouseMoveToLocation(-190, 0)
@@ -601,7 +617,6 @@ test_that("tagging relations created after text is updated", {
   relationtag$sendKeysToElement(list("isLinked"))
   relationtag$sendKeysToElement(list(key = "enter"))
 
-
   results <- remDr$findElement(using = "xpath", ANNOTATION_RESULT)
   parsed <- results$getElementText()
   tag1 <- grep("nerdy", parsed[[1]])
@@ -609,6 +624,25 @@ test_that("tagging relations created after text is updated", {
   link <- grep("isLinked", parsed[[1]])
   results <- paste(tag1, tag2, link, collapse = "")
   expect_equal(results, "1 1 1")
+})
+
+test_that("annotations are loaded", {
+  # Don't run these tests on CRAN build servers
+  skip_on_cran()
+
+  remDr$setWindowSize(1028, 1028, winHand = "current") 
+  remDr$navigate(appURL)
+  waiting(0.1, 0.5)
+  appTitle <- remDr$getTitle()[[1]]
+  webElement <- remDr$findElement(using = "xpath", ANNOTATION_TEXT)
+  loadButton <- remDr$findElement(using = "xpath", LOAD_ANNOTATION) 
+  loadButton$clickElement()
+  waiting(0.1,0.5,LOADED_ANNOTATION) 
+   
+  annotation = remDr$findElement(using = "xpath", LOADED_ANNOTATION)
+  results = as.character(annotation$getElementText())
+
+  expect_equal(results, "er he h")
 })
 
 

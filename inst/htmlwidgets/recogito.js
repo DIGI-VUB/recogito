@@ -37,8 +37,12 @@ HTMLWidgets.widget({
           //The tags can be misaligned when text contains multiple 
           //spaces or special characters.
           if(x.annotations!="{}" & x.annotations!='[""]'){
-            r.setAnnotations(JSON.parse(x.annotations)) 
+            r.setAnnotations(JSON.parse(x.annotations));
           }
+          Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
+        if(x.annotations!="{}" & x.annotations!='[""]'){
+          r.setAnnotations(JSON.parse(x.annotations));
           Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
         }
         if(x.annotationMode === 'RELATIONS'){
