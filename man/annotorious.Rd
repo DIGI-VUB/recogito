@@ -8,6 +8,7 @@ annotorious(
   inputId = "annotations",
   src,
   tags = c("Cat", "Dog", "Person", "Other"),
+  type = c("default", "openseadragon"),
   width = NULL,
   height = NULL,
   elementId = NULL,
@@ -20,6 +21,8 @@ annotorious(
 \item{src}{character string with the image/url to annotate}
 
 \item{tags}{character vector of possible labels you want to use}
+
+\item{type}{either 'default' or 'openseadragon' in order to allow zooming with openseadragon or not}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 

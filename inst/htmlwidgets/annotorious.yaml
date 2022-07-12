@@ -6,5 +6,4 @@ dependencies:
       - annotorious.min.css
     script:
       - annotorious.min.js
-      - annotorious-shape-labels.min.js
-      - annotorious-toolbar.min.js
+      - annotorious-shape-labels-0.2.2/annotorious-shape-labels.min.js

@@ -4,11 +4,17 @@
 \alias{annotorious-shiny}
 \alias{annotoriousOutput}
 \alias{renderAnnotorious}
+\alias{openseadragonOutput}
+\alias{renderOpenSeaDragon}
 \title{Shiny bindings for annotorious}
 \usage{
 annotoriousOutput(outputId, width = "100\%", height = "400px")
 
 renderAnnotorious(expr, env = parent.frame(), quoted = FALSE)
+
+openseadragonOutput(outputId, width = "100\%", height = "400px")
+
+renderOpenSeaDragon(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
 \item{outputId}{output variable to read from}
@@ -35,6 +41,9 @@ applications and interactive Rmd documents.
 }
 \examples{
 if(interactive() && require(shiny)){
+##
+## Annotorious
+##
 library(shiny)
 library(recogito)
 url <- paste("https://upload.wikimedia.org/",
@@ -47,6 +56,29 @@ ui <- fluidPage(annotoriousOutput(outputId = "anno"),
 server <- function(input, output) {
   output$anno <- renderAnnotorious({
     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$annotations)
+  })
+}
+shinyApp(ui, server)
+
+##
+## Annotorious using OpenSeaDragon, allowing to zoom in,
+## to select an area, press shift and next select the area
+##
+library(shiny)
+library(recogito)
+url <- paste("https://upload.wikimedia.org/",
+             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+             sep = "")
+ui <- fluidPage(openseadragonOutput(outputId = "anno"),
+                tags$hr(),
+                tags$h3("Results"),
+                verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  output$anno <- renderOpenSeaDragon({
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "openseadragon")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$annotations)

@@ -3,6 +3,7 @@
 #' @param inputId The input slot that will be used to access the value
 #' @param src character string with the image/url to annotate
 #' @param tags character vector of possible labels you want to use
+#' @param type either 'default' or 'openseadragon' in order to allow zooming with openseadragon or not
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
@@ -25,7 +26,9 @@
 annotorious <- function(inputId = "annotations",
                         src,
                         tags = c("Cat", "Dog", "Person", "Other"),
+                        type = c("default", "openseadragon"),
                         width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
+  type <- match.arg(type)
 
   # forward options using x
   x = list(
@@ -33,19 +36,26 @@ annotorious <- function(inputId = "annotations",
     src = src,
     tags = tags
   )
-
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'annotorious',
-    x,
-    width = width,
-    height = height,
-    package = 'recogito',
-    elementId = elementId,
-    dependencies = dependencies
-  )
+  if(type == "default"){
+    htmlwidgets::createWidget(
+      name = 'annotorious',
+      x,
+      width = width,
+      height = height,
+      package = 'recogito',
+      elementId = elementId,
+      dependencies = dependencies)
+  }else if(type == "openseadragon"){
+    htmlwidgets::createWidget(
+      name = 'annotoriousopenseadragon',
+      x,
+      width = width,
+      height = height,
+      package = 'recogito',
+      elementId = elementId,
+      dependencies = dependencies)
+  }
 }
-
 
 
 
@@ -53,16 +63,44 @@ widget_html.annotorious <- function(id, style, class, ...){
   el <- tags$div(
     id = sprintf("%s-outer-container", id),
     htmltools::tags$button(id = sprintf("%s-toggle", id), "RECTANGLE"),
-    #htmltools::tags$p(class="instructions", "Click and drag the mouse on the image to create a new area of annotation."),
     htmltools::tags$br(),
     htmltools::tags$br(),
     tags$div(
       id = id,
       class = class,
-      #tags$img(id = "hallstatt", src="640px-Hallstatt.jpg")
-      #htmltools::tags$img(id = sprintf("%s-img", id), src = "https://www.w3schools.com/images/picture.jpg")
       htmltools::tags$img(id = sprintf("%s-img", id))
   ))
+  el
+}
+
+widget_html.annotoriousopenseadragon <- function(id, style, class, ...){
+  #path <- system.file("htmlwidgets", "lib", "openseadragon-2.4.2", "images", package = "recogito")
+  # dependencies <- htmltools::htmlDependency(
+  #   name = "openseadragon",
+  #   version = "2.4.2",
+  #   src = c(file = path)
+  # )
+  #addResourcePath('images', system.file("htmlwidgets", "lib", "openseadragon-2.4.2", "images", package = "recogito"))
+  #htmltools::attachDependencies(
+  #tags$div(id = "openseadragon", style = "width: 640px; height: 480px;"),
+  #tags$div(id = "openseadragon"),
+  #dependencies),
+  #htmltools::tags$br(),
+  #htmltools::tags$br(),
+  el <- tags$div(
+    id = sprintf("%s-outer-container", id),
+    htmltools::tags$button(id = sprintf("%s-toggle", id), "RECTANGLE"),
+    tags$div(id = "openseadragon", style = "width: 640px; height: 480px;"),
+    #tags$div(id = "openseadragon", style = style)
+    tags$div(id = id, class = class)
+  )
+  el <- tags$div(
+    tags$p(tags$div(id = sprintf("%s-outer-container", id))),
+    tags$p(#tags$div(id = "openseadragon", style = "width: 100%; height: 480px;"),
+           #tags$div(id = "openseadragon", style = style),
+           tags$div(id = id, class = class, style = style))
+  )
+
   el
 }
 
@@ -84,6 +122,9 @@ widget_html.annotorious <- function(id, style, class, ...){
 #' @export
 #' @examples
 #' if(interactive() && require(shiny)){
+#' ##
+#' ## Annotorious
+#' ##
 #' library(shiny)
 #' library(recogito)
 #' url <- paste("https://upload.wikimedia.org/",
@@ -96,6 +137,29 @@ widget_html.annotorious <- function(id, style, class, ...){
 #' server <- function(input, output) {
 #'   output$anno <- renderAnnotorious({
 #'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
+#'   })
+#'   output$annotation_result <- renderPrint({
+#'     read_annotorious(input$annotations)
+#'   })
+#' }
+#' shinyApp(ui, server)
+#'
+#' ##
+#' ## Annotorious using OpenSeaDragon, allowing to zoom in,
+#' ## to select an area, press shift and next select the area
+#' ##
+#' library(shiny)
+#' library(recogito)
+#' url <- paste("https://upload.wikimedia.org/",
+#'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+#'              sep = "")
+#' ui <- fluidPage(openseadragonOutput(outputId = "anno"),
+#'                 tags$hr(),
+#'                 tags$h3("Results"),
+#'                 verbatimTextOutput(outputId = "annotation_result"))
+#' server <- function(input, output) {
+#'   output$anno <- renderOpenSeaDragon({
+#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "openseadragon")
 #'   })
 #'   output$annotation_result <- renderPrint({
 #'     read_annotorious(input$annotations)
@@ -117,6 +181,22 @@ renderAnnotorious <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   htmlwidgets::shinyRenderWidget(expr, annotoriousOutput, env, quoted = TRUE)
 }
+
+
+#' @rdname annotorious-shiny
+#' @export
+openseadragonOutput <- function(outputId, width = '100%', height = '400px'){
+  htmlwidgets::shinyWidgetOutput(outputId, 'annotoriousopenseadragon', width, height, package = 'recogito')
+}
+
+#' @rdname annotorious-shiny
+#' @export
+renderOpenSeaDragon <- function(expr, env = parent.frame(), quoted = FALSE) {
+  if (!quoted) { expr <- substitute(expr) } # force quoted
+  htmlwidgets::shinyRenderWidget(expr, openseadragonOutput, env, quoted = TRUE)
+}
+
+
 
 
 #' @title Parse annotorious annotations
@@ -214,13 +294,13 @@ read_annotorious <- function(x, src = character()){
     comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
     x <- data.frame(id = sapply(x, FUN = function(x) x$id),
                     type = sapply(x, FUN = function(x){
-                      x <- x$target[[1]]$value
+                      x <- x$target$selector$value
                       ifelse(grepl(x, pattern = "xywh=pixel"), "RECTANGLE",
                              ifelse(grepl(x, pattern = "polygon points"), "POLYGON", NA))
                     }),
                     label = I(tags),
                     comment = I(comment),
-                    content = sapply(x, FUN = function(x) x$target[[1]]$value), stringsAsFactors = FALSE)
+                    content = sapply(x, FUN = function(x) x$target$selector$value), stringsAsFactors = FALSE)
     x$xywh <- strsplit(x$content, split = ":")
     x$xywh <- sapply(x$xywh, FUN = function(x) x[length(x)])
     x$xywh <- strsplit(x$xywh, split = ",")
