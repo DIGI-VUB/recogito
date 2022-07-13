@@ -108,9 +108,9 @@ library(recogito)
 url <- system.file(package = "recogito",
                    "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
 addResourcePath(prefix = "img", directoryPath = dirname(url))
-ui <- fluidPage(openseadragonOutput(outputId = "anno", width = "100\%", height = "250px"))
+ui <- fluidPage(openseadragonOutputNoToolbar(outputId = "anno", width = "100\%", height = "250px"))
 server <- function(input, output) {
-  output$anno <- renderOpenSeaDragon({
+  output$anno <- renderOpenSeaDragonNoToolbar({
     annotorious("annotations", src = sprintf("img/\%s", basename(url)),
                  type = "openseadragon-notoolbar")
   })
