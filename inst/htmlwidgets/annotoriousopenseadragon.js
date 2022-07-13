@@ -2,20 +2,9 @@ HTMLWidgets.widget({
   name: 'annotoriousopenseadragon',
   type: 'output',
   factory: function(el, width, height) {
-    console.log(document.getElementById(el.id.concat("-img")));
-    console.log(el.id);
     var viewer = OpenSeadragon({
-          //id: "openseadragon",
           id: el.id,
           prefixUrl: "/openseadragon-2.4.2/images/",
-/*
-          tileSources: {
-            type: "image",
-            //url: "https://upload.wikimedia.org/wikipedia/commons/8/82/%22CUT%22_June_1929_05.jpg"
-            url: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
-            //url: document.getElementById(el.id.concat("-img")).src
-          },
-*/
           gestureSettingsTouch: {
             pinchRotate: true
           },
@@ -27,8 +16,6 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         viewer.open({
             type: "image",
-            //url: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
-            //url: "https://upload.wikimedia.org/wikipedia/commons/8/82/%22CUT%22_June_1929_05.jpg"
             url: x.src
           });
         var anno = OpenSeadragon.Annotorious(viewer, {
@@ -57,7 +44,6 @@ HTMLWidgets.widget({
       },
       resize: function(width, height) {
       }
-
     };
   }
 });
