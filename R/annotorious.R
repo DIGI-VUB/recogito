@@ -3,7 +3,7 @@
 #' @param inputId The input slot that will be used to access the value
 #' @param src character string with the image/url to annotate
 #' @param tags character vector of possible labels you want to use
-#' @param type either 'default' or 'openseadragon' in order to allow zooming with openseadragon or not
+#' @param type either 'default', 'openseadragon', 'openseadragon-notoolbar' in order to allow zooming with openseadragon or not, with or without a toolbar
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
@@ -26,7 +26,7 @@
 annotorious <- function(inputId = "annotations",
                         src,
                         tags = c("Cat", "Dog", "Person", "Other"),
-                        type = c("default", "openseadragon"),
+                        type = c("default", "openseadragon", "openseadragon-notoolbar"),
                         width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
 
@@ -34,7 +34,8 @@ annotorious <- function(inputId = "annotations",
   x = list(
     inputId = inputId,
     src = src,
-    tags = tags
+    tags = tags,
+    opts = list(type = type)
   )
   if(type == "default"){
     htmlwidgets::createWidget(
@@ -45,7 +46,7 @@ annotorious <- function(inputId = "annotations",
       package = 'recogito',
       elementId = elementId,
       dependencies = dependencies)
-  }else if(type == "openseadragon"){
+  }else if(type %in% c("openseadragon", "openseadragon-notoolbar")){
     htmlwidgets::createWidget(
       name = 'annotoriousopenseadragon',
       x,
@@ -167,10 +168,30 @@ widget_html.annotoriousopenseadragon <- function(id, style, class, ...){
 #' }
 #' shinyApp(ui, server)
 #'
+#' ##
+#' ## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
+#' ##
+#' library(shiny)
+#' library(recogito)
+#' url <- paste("https://upload.wikimedia.org/",
+#'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+#'              sep = "")
+#' ui <- fluidPage(openseadragonOutput(outputId = "anno"),
+#'                 tags$hr(),
+#'                 tags$h3("Results"),
+#'                 verbatimTextOutput(outputId = "annotation_result"))
+#' server <- function(input, output) {
+#'   output$anno <- renderOpenSeaDragon({
+#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url,
+#'                 type = "openseadragon-notoolbar")
+#'   })
+#'   output$annotation_result <- renderPrint({
+#'     read_annotorious(input$annotations)
+#'   })
 #' }
+#' shinyApp(ui, server)
 #'
-#'
-#' annotoriousOutput(outputId = "anno")
+#' }
 annotoriousOutput <- function(outputId, width = '100%', height = '400px'){
   htmlwidgets::shinyWidgetOutput(outputId, 'annotorious', width, height, package = 'recogito')
 }

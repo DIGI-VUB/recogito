@@ -23,7 +23,6 @@ HTMLWidgets.widget({
           showFlipControl: false,
           constrainDuringPan: true,
         });
-        console.log(viewer);
     return {
       renderValue: function(x) {
         viewer.open({
@@ -32,7 +31,6 @@ HTMLWidgets.widget({
             //url: "https://upload.wikimedia.org/wikipedia/commons/8/82/%22CUT%22_June_1929_05.jpg"
             url: x.src
           });
-        console.log(x.src);
         var anno = OpenSeadragon.Annotorious(viewer, {
           image: el.id,
           locale: 'auto',
@@ -43,8 +41,10 @@ HTMLWidgets.widget({
           ],
           formatter: Annotorious.ShapeLabelsFormatter()
         });
-        Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
-        Annotorious.BetterPolygon(anno);
+        if(x.opts.type === "openseadragon"){
+          Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
+          Annotorious.BetterPolygon(anno);
+        }
         anno.on('createAnnotation', function(a) {
           Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         });
