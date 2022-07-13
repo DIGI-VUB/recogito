@@ -37,24 +37,12 @@ annotorious <- function(inputId = "annotations",
     tags = tags,
     opts = list(type = type)
   )
-  if(type == "default"){
-    htmlwidgets::createWidget(
-      name = 'annotorious',
-      x,
-      width = width,
-      height = height,
-      package = 'recogito',
-      elementId = elementId,
-      dependencies = dependencies)
-  }else if(type %in% c("openseadragon", "openseadragon-notoolbar")){
-    htmlwidgets::createWidget(
-      name = 'annotoriousopenseadragon',
-      x,
-      width = width,
-      height = height,
-      package = 'recogito',
-      elementId = elementId,
-      dependencies = dependencies)
+  if(type %in% "default"){
+    htmlwidgets::createWidget(name = 'annotorious', x, width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
+  }else if(type %in% "openseadragon"){
+    htmlwidgets::createWidget(name = 'annotoriousopenseadragon', x, width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
+  }else if(type %in% "openseadragon-notoolbar"){
+    htmlwidgets::createWidget(name = 'annotoriousopenseadragonnotoolbar', x, width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
   }
 }
 
@@ -75,33 +63,14 @@ widget_html.annotorious <- function(id, style, class, ...){
 }
 
 widget_html.annotoriousopenseadragon <- function(id, style, class, ...){
-  #path <- system.file("htmlwidgets", "lib", "openseadragon-2.4.2", "images", package = "recogito")
-  # dependencies <- htmltools::htmlDependency(
-  #   name = "openseadragon",
-  #   version = "2.4.2",
-  #   src = c(file = path)
-  # )
-  #addResourcePath('images', system.file("htmlwidgets", "lib", "openseadragon-2.4.2", "images", package = "recogito"))
-  #htmltools::attachDependencies(
-  #tags$div(id = "openseadragon", style = "width: 640px; height: 480px;"),
-  #tags$div(id = "openseadragon"),
-  #dependencies),
-  #htmltools::tags$br(),
-  #htmltools::tags$br(),
-  el <- tags$div(
-    id = sprintf("%s-outer-container", id),
-    htmltools::tags$button(id = sprintf("%s-toggle", id), "RECTANGLE"),
-    tags$div(id = "openseadragon", style = "width: 640px; height: 480px;"),
-    #tags$div(id = "openseadragon", style = style)
-    tags$div(id = id, class = class)
-  )
   el <- tags$div(
     tags$p(tags$div(id = sprintf("%s-outer-container", id))),
-    tags$p(#tags$div(id = "openseadragon", style = "width: 100%; height: 480px;"),
-           #tags$div(id = "openseadragon", style = style),
-           tags$div(id = id, class = class, style = style))
-  )
+    tags$p(tags$div(id = id, class = class, style = style)))
+  el
+}
 
+widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...){
+  el <- tags$div(tags$p(tags$div(id = id, class = class, style = style)))
   el
 }
 
@@ -151,16 +120,23 @@ widget_html.annotoriousopenseadragon <- function(id, style, class, ...){
 #' ##
 #' library(shiny)
 #' library(recogito)
-#' url <- paste("https://upload.wikimedia.org/",
-#'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-#'              sep = "")
-#' ui <- fluidPage(openseadragonOutput(outputId = "anno"),
+#' urls <- paste("https://upload.wikimedia.org/",
+#'               c("wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+#'                 "wikipedia/commons/6/64/Cat_and_dog_standoff_%283926784260%29.jpg"),
+#'               sep = "")
+#' ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
+#'                 openseadragonOutput(outputId = "anno"),
 #'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
+#'   current_image <- reactive({
+#'     input$ui_switch
+#'     list(url = sample(urls, size = 1))
+#'   })
 #'   output$anno <- renderOpenSeaDragon({
-#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "openseadragon")
+#'     info <- current_image()
+#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url, type = "openseadragon")
 #'   })
 #'   output$annotation_result <- renderPrint({
 #'     read_annotorious(input$annotations)
@@ -210,6 +186,20 @@ openseadragonOutput <- function(outputId, width = '100%', height = '400px'){
 renderOpenSeaDragon <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   htmlwidgets::shinyRenderWidget(expr, openseadragonOutput, env, quoted = TRUE)
+}
+
+
+#' @rdname annotorious-shiny
+#' @export
+openseadragonOutputNoToolbar <- function(outputId, width = '100%', height = '400px'){
+  htmlwidgets::shinyWidgetOutput(outputId, 'annotoriousopenseadragonnotoolbar', width, height, package = 'recogito')
+}
+
+#' @rdname annotorious-shiny
+#' @export
+renderOpenSeaDragonNoToolbar <- function(expr, env = parent.frame(), quoted = FALSE) {
+  if (!quoted) { expr <- substitute(expr) } # force quoted
+  htmlwidgets::shinyRenderWidget(expr, openseadragonOutputNoToolbar, env, quoted = TRUE)
 }
 
 
@@ -303,51 +293,57 @@ renderOpenSeaDragon <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' ocv_polygon(img, pts = area$polygon[[1]])
 #' }
 read_annotorious <- function(x, src = character()){
+  default <- data.frame(id = character(), type = character(), label = I(list()), comment = I(list()), x = numeric(), y = numeric(), width = numeric(), height = numeric(), polygon = I(list()), stringsAsFactors = FALSE)
   if(is.character(x)){
     x <- jsonlite::fromJSON(x, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE, flatten = FALSE)
-    label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
-    tags    <- lapply(label, FUN = function(x) x$value[x$purpose %in% "tagging"])
-    comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
-    x <- data.frame(id = sapply(x, FUN = function(x) x$id),
-                    type = sapply(x, FUN = function(x){
-                      x <- x$target$selector$value
-                      ifelse(grepl(x, pattern = "xywh=pixel"), "RECTANGLE",
-                             ifelse(grepl(x, pattern = "polygon points"), "POLYGON", NA))
-                    }),
-                    label = I(tags),
-                    comment = I(comment),
-                    content = sapply(x, FUN = function(x) x$target$selector$value), stringsAsFactors = FALSE)
-    x$xywh <- strsplit(x$content, split = ":")
-    x$xywh <- sapply(x$xywh, FUN = function(x) x[length(x)])
-    x$xywh <- strsplit(x$xywh, split = ",")
-    x$x <- NA_real_
-    x$y <- NA_real_
-    x$width <- NA_real_
-    x$height <- NA_real_
-    idx <- which(x$type == "RECTANGLE")
-    x$x[idx]       <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[1]))
-    x$y[idx]       <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[2]))
-    x$width[idx]   <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[3]))
-    x$height[idx]  <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[4]))
-    idx <- which(x$type == "POLYGON")
-    x$polygon      <- NA_character_
-    if(length(idx) > 0){
-      x$polygon[idx] <- sapply(strsplit(x$content[idx], split = '"'), FUN = function(x) x[2])
-    }
-    out <- x[, c("id", "type", "label", "comment", "x", "y", "width", "height", "polygon"), drop = FALSE]
-    out$polygon <- strsplit(out$polygon, split = " ")
-    out$polygon <- lapply(out$polygon, FUN = function(x){
-      if(all(is.na(x))){
-        x <- data.frame(x = numeric(), y = numeric())
-      }else{
-        x <- strsplit(x, split = ",")
-        x <- data.frame(x = as.numeric(sapply(x, FUN = function(x) x[1])),
-                        y = as.numeric(sapply(x, FUN = function(x) x[2])))
+    if(length(x) == 0){
+      out <- default
+    }else{
+      label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
+      tags    <- lapply(label, FUN = function(x) x$value[x$purpose %in% "tagging"])
+      comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
+      x <- data.frame(id = sapply(x, FUN = function(x) x$id),
+                      type = sapply(x, FUN = function(x){
+                        x <- x$target$selector$value
+                        ifelse(grepl(x, pattern = "xywh=pixel"), "RECTANGLE",
+                               ifelse(grepl(x, pattern = "polygon points"), "POLYGON", NA))
+                      }),
+                      label = I(tags),
+                      comment = I(comment),
+                      content = sapply(x, FUN = function(x) x$target$selector$value), stringsAsFactors = FALSE)
+      x$xywh <- strsplit(x$content, split = ":")
+      x$xywh <- sapply(x$xywh, FUN = function(x) x[length(x)])
+      x$xywh <- strsplit(x$xywh, split = ",")
+      x$x <- NA_real_
+      x$y <- NA_real_
+      x$width <- NA_real_
+      x$height <- NA_real_
+      idx <- which(x$type == "RECTANGLE")
+      x$x[idx]       <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[1]))
+      x$y[idx]       <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[2]))
+      x$width[idx]   <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[3]))
+      x$height[idx]  <- as.numeric(sapply(x$xywh[idx], FUN = function(x) x[4]))
+      idx <- which(x$type == "POLYGON")
+      x$polygon      <- NA_character_
+      if(length(idx) > 0){
+        x$polygon[idx] <- sapply(strsplit(x$content[idx], split = '"'), FUN = function(x) x[2])
       }
-      x
-    })
+      out <- x[, c("id", "type", "label", "comment", "x", "y", "width", "height", "polygon"), drop = FALSE]
+      out$polygon <- strsplit(out$polygon, split = " ")
+      out$polygon <- lapply(out$polygon, FUN = function(x){
+        if(all(is.na(x))){
+          x <- data.frame(x = numeric(), y = numeric())
+        }else{
+          x <- strsplit(x, split = ",")
+          x <- data.frame(x = as.numeric(sapply(x, FUN = function(x) x[1])),
+                          y = as.numeric(sapply(x, FUN = function(x) x[2])))
+        }
+        x
+      })
+    }
+
   }else{
-    out <- data.frame(id = character(), type = character(), label = I(list()), comment = I(list()), x = numeric(), y = numeric(), width = numeric(), height = numeric(), polygon = I(list()), stringsAsFactors = FALSE)
+    out <- default
   }
   out <- out[, c("id", "type", "label", "comment", "x", "y", "width", "height", "polygon"), drop = FALSE]
   attr(out, "src") <- src

@@ -3,7 +3,7 @@
 - read_annotorious now extracts from x$target$selector instead of x$target[[1]]$value
 - Allow to annotate using zoomable images using openseadragon
     - annotorious gains a type argument, allowing to use openseadragon for zoomable image selections
-    - added openseadragonOutput, renderOpenSeaDragon and backend functions for these
+    - added openseadragonOutput, renderOpenSeaDragon, openseadragonOutputNoToolbar, renderOpenSeaDragonNoToolbar and backend functions for these
     - added javascript libraries (and updated LICENSE.note)
         - openseadragon-2.4.2
         - annotorious-2.5.10

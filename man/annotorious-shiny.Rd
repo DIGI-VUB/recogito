@@ -6,6 +6,8 @@
 \alias{renderAnnotorious}
 \alias{openseadragonOutput}
 \alias{renderOpenSeaDragon}
+\alias{openseadragonOutputNoToolbar}
+\alias{renderOpenSeaDragonNoToolbar}
 \title{Shiny bindings for annotorious}
 \usage{
 annotoriousOutput(outputId, width = "100\%", height = "400px")
@@ -15,6 +17,10 @@ renderAnnotorious(expr, env = parent.frame(), quoted = FALSE)
 openseadragonOutput(outputId, width = "100\%", height = "400px")
 
 renderOpenSeaDragon(expr, env = parent.frame(), quoted = FALSE)
+
+openseadragonOutputNoToolbar(outputId, width = "100\%", height = "400px")
+
+renderOpenSeaDragonNoToolbar(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
 \item{outputId}{output variable to read from}
@@ -69,16 +75,23 @@ shinyApp(ui, server)
 ##
 library(shiny)
 library(recogito)
-url <- paste("https://upload.wikimedia.org/",
-             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-             sep = "")
-ui <- fluidPage(openseadragonOutput(outputId = "anno"),
+urls <- paste("https://upload.wikimedia.org/",
+              c("wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+                "wikipedia/commons/6/64/Cat_and_dog_standoff_\%283926784260\%29.jpg"),
+              sep = "")
+ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
+                openseadragonOutput(outputId = "anno"),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
+  current_image <- reactive({
+    input$ui_switch
+    list(url = sample(urls, size = 1))
+  })
   output$anno <- renderOpenSeaDragon({
-    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "openseadragon")
+    info <- current_image()
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url, type = "openseadragon")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$annotations)

@@ -1,5 +1,5 @@
 HTMLWidgets.widget({
-  name: 'annotoriousopenseadragon',
+  name: 'annotoriousopenseadragonnotoolbar',
   type: 'output',
   factory: function(el, width, height) {
     var viewer = OpenSeadragon({
@@ -18,16 +18,9 @@ HTMLWidgets.widget({
       allowEmpty: true,
       formatter: Annotorious.ShapeLabelsFormatter()
     });
-    Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
-    Annotorious.BetterPolygon(anno);
     return {
       renderValue: function(x) {
-        anno.widgets = [
-            { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: x.tags }
-          ],
         anno.clearAnnotations();
-        Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         viewer.open({
             type: "image",
             url: x.src
