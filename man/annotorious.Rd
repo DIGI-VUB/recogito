@@ -8,7 +8,7 @@ annotorious(
   inputId = "annotations",
   src,
   tags = c("Cat", "Dog", "Person", "Other"),
-  type = c("default", "openseadragon"),
+  type = c("default", "openseadragon", "openseadragon-notoolbar"),
   width = NULL,
   height = NULL,
   elementId = NULL,
@@ -22,7 +22,7 @@ annotorious(
 
 \item{tags}{character vector of possible labels you want to use}
 
-\item{type}{either 'default' or 'openseadragon' in order to allow zooming with openseadragon or not}
+\item{type}{either 'default', 'openseadragon', 'openseadragon-notoolbar' in order to allow zooming with openseadragon or not, with or without a toolbar}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 

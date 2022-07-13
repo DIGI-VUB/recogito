@@ -86,8 +86,23 @@ server <- function(input, output) {
 }
 shinyApp(ui, server)
 
+##
+## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
+## showing how to load a local image
+##
+library(shiny)
+library(recogito)
+url <- system.file(package = "recogito",
+                   "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+addResourcePath(prefix = "img", directoryPath = dirname(url))
+ui <- fluidPage(openseadragonOutput(outputId = "anno", width = "100\%", height = "250px"))
+server <- function(input, output) {
+  output$anno <- renderOpenSeaDragon({
+    annotorious("annotations", src = sprintf("img/\%s", basename(url)),
+                 type = "openseadragon-notoolbar")
+  })
 }
+shinyApp(ui, server)
 
-
-annotoriousOutput(outputId = "anno")
+}
 }

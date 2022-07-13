@@ -170,23 +170,18 @@ widget_html.annotoriousopenseadragon <- function(id, style, class, ...){
 #'
 #' ##
 #' ## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
+#' ## showing how to load a local image
 #' ##
 #' library(shiny)
 #' library(recogito)
-#' url <- paste("https://upload.wikimedia.org/",
-#'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-#'              sep = "")
-#' ui <- fluidPage(openseadragonOutput(outputId = "anno"),
-#'                 tags$hr(),
-#'                 tags$h3("Results"),
-#'                 verbatimTextOutput(outputId = "annotation_result"))
+#' url <- system.file(package = "recogito",
+#'                    "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+#' addResourcePath(prefix = "img", directoryPath = dirname(url))
+#' ui <- fluidPage(openseadragonOutput(outputId = "anno", width = "100%", height = "250px"))
 #' server <- function(input, output) {
 #'   output$anno <- renderOpenSeaDragon({
-#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url,
-#'                 type = "openseadragon-notoolbar")
-#'   })
-#'   output$annotation_result <- renderPrint({
-#'     read_annotorious(input$annotations)
+#'     annotorious("annotations", src = sprintf("img/%s", basename(url)),
+#'                  type = "openseadragon-notoolbar")
 #'   })
 #' }
 #' shinyApp(ui, server)
