@@ -4,7 +4,7 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
     var viewer = OpenSeadragon({
       id: el.id,
-      prefixUrl: "/openseadragon-2.4.2/images/",
+      prefixUrl: "openseadragon-2.4.2/images/",
       gestureSettingsTouch: {
         pinchRotate: true
       },
