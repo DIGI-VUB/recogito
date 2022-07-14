@@ -25,7 +25,7 @@ HTMLWidgets.widget({
         anno.widgets = [
             { widget: 'COMMENT' },
             { widget: 'TAG', vocabulary: x.tags }
-          ],
+          ];
         anno.clearAnnotations();
         Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         viewer.open({
