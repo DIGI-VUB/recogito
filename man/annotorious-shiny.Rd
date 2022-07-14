@@ -48,23 +48,18 @@ applications and interactive Rmd documents.
 \examples{
 if(interactive() && require(shiny)){
 ##
-## Annotorious
+## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
+## showing how to load a local image
 ##
 library(shiny)
 library(recogito)
-url <- paste("https://upload.wikimedia.org/",
-             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-             sep = "")
-ui <- fluidPage(annotoriousOutput(outputId = "anno"),
-                tags$hr(),
-                tags$h3("Results"),
-                verbatimTextOutput(outputId = "annotation_result"))
+url <- system.file(package = "recogito", "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+addResourcePath(prefix = "img", directoryPath = dirname(url))
+ui <- fluidPage(openseadragonOutputNoToolbar(outputId = "anno", width = "100\%", height = "250px"))
 server <- function(input, output) {
-  output$anno <- renderAnnotorious({
-    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
-  })
-  output$annotation_result <- renderPrint({
-    read_annotorious(input$annotations)
+  output$anno <- renderOpenSeaDragonNoToolbar({
+    annotorious("annotations", src = sprintf("img/\%s", basename(url)),
+                 type = "openseadragon-notoolbar")
   })
 }
 shinyApp(ui, server)
@@ -99,20 +94,54 @@ server <- function(input, output) {
 }
 shinyApp(ui, server)
 
+
 ##
-## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
-## showing how to load a local image
+## Annotorious without openseadragon
 ##
 library(shiny)
 library(recogito)
-url <- system.file(package = "recogito",
-                   "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
-addResourcePath(prefix = "img", directoryPath = dirname(url))
-ui <- fluidPage(openseadragonOutputNoToolbar(outputId = "anno", width = "100\%", height = "250px"))
+url <- paste("https://upload.wikimedia.org/",
+             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+             sep = "")
+ui <- fluidPage(annotoriousOutput(outputId = "anno"),
+                tags$hr(),
+                tags$h3("Results"),
+                verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
-  output$anno <- renderOpenSeaDragonNoToolbar({
-    annotorious("annotations", src = sprintf("img/\%s", basename(url)),
-                 type = "openseadragon-notoolbar")
+  output$anno <- renderAnnotorious({
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$annotations)
+  })
+}
+shinyApp(ui, server)
+
+##
+## Annotorious, without openseadragon changing the url
+##
+library(shiny)
+library(recogito)
+urls <- paste("https://upload.wikimedia.org/",
+              c("wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
+                "wikipedia/commons/6/64/Cat_and_dog_standoff_\%283926784260\%29.jpg"),
+              sep = "")
+ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
+                annotoriousOutput(outputId = "anno"),
+                tags$hr(),
+                tags$h3("Results"),
+                verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  current_image <- reactive({
+    input$ui_switch
+    list(url = sample(urls, size = 1))
+  })
+  output$anno <- renderAnnotorious({
+    info <- current_image()
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url)
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$annotations)
   })
 }
 shinyApp(ui, server)

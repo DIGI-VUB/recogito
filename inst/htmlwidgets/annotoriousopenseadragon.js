@@ -1,3 +1,4 @@
+
 HTMLWidgets.widget({
   name: 'annotoriousopenseadragon',
   type: 'output',
@@ -20,12 +21,49 @@ HTMLWidgets.widget({
     });
     Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
     Annotorious.BetterPolygon(anno);
+
     return {
       renderValue: function(x) {
-        anno.widgets = [
+        // Quick selector widget showing buttons on top of the annotation widget
+        var tagSelectorWidget = function(args) {
+          // Triggers callbacks on user action
+          var addTag = function(evt) {
+            args.onAppendBody({
+              type: 'TextualBody',
+              purpose: 'tagging',
+              value: evt.target.dataset.tag
+            });
+          };
+          // Render the top buttons on top of the widget, using default shiny btn btn-default classes
+          var createButton = function(value) {
+            var button = document.createElement('button');
+            button.className = "btn btn-default";
+            button.dataset.tag = value;
+            button.textContent = value;
+            button.addEventListener('click', addTag);
+            return button;
+          };
+          var container = document.createElement('div');
+          container.className = 'tagset-quickselector-widget';
+          tagset = x.tags;
+          for (let i = 0; i < tagset.length; i++) {
+            container.appendChild(createButton(tagset[i]));
+          }
+          return container;
+        };
+        if(x.quickselector === true){
+          anno.widgets = [
+            tagSelectorWidget,
             { widget: 'COMMENT' },
             { widget: 'TAG', vocabulary: x.tags }
           ];
+        }else{
+          anno.widgets = [
+            { widget: 'COMMENT' },
+            { widget: 'TAG', vocabulary: x.tags }
+          ];
+        }
+
         anno.clearAnnotations();
         Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         viewer.open({
