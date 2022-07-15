@@ -10,6 +10,7 @@ recogito(
   type = c("relations", "tags"),
   tags = c("Location", "Person", "Place", "Other"),
   mode = c("html", "pre"),
+  annotations = "{}",
   width = NULL,
   height = NULL,
   elementId = NULL,
@@ -26,6 +27,8 @@ recogito(
 \item{tags}{character vector of possible tags}
 
 \item{mode}{either 'html' or 'pre'}
+
+\item{annotations}{character string with a predefined set of annotations}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 

@@ -43,22 +43,48 @@ applications and interactive Rmd documents.
 \examples{
 if(interactive() && require(shiny)){
 
+##
+## Tagging only, no relations
+##
 library(shiny)
 library(recogito)
 txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
-ui <- fluidPage(recogitoOutput(outputId = "annotation_text"),
+ui <- fluidPage(tags$h3("Provide some text to annotate"),
+                textAreaInput(inputId = "ui_text", label = "Provide some text", value = txt),
+                tags$h3("Annotation area"),
+                recogitotagsonlyOutput(outputId = "annotation_text"),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
   output$annotation_text <- renderRecogitotagsonly({
-    recogito("annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
+    recogito("annotations", text = input$ui_text, tags = c("LOCATION", "TIME", "PERSON"))
   })
   output$annotation_result <- renderPrint({
-    if(length(input$annotations) > 0){
-      x <- read_recogito(input$annotations)
-      x
-    }
+    read_recogito(input$annotations)
+  })
+}
+shinyApp(ui, server)
+
+##
+## Tagging and relations
+##
+library(shiny)
+library(recogito)
+txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
+ui <- fluidPage(tags$h3("Provide some text to annotate"),
+                textAreaInput(inputId = "ui_text", label = "Provide some text", value = txt),
+                tags$h3("Annotation area"),
+                recogitoOutput(outputId = "annotation_text"),
+                tags$hr(),
+                tags$h3("Results"),
+                verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  output$annotation_text <- renderRecogito({
+    recogito("annotations", text = input$ui_text, tags = c("LOCATION", "TIME", "PERSON"))
+  })
+  output$annotation_result <- renderPrint({
+    read_recogito(input$annotations)
   })
 }
 shinyApp(ui, server)

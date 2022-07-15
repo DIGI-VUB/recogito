@@ -11,6 +11,11 @@
         - annotorious-shape-labels-0.2.4
         - annotorious-toolbar-1.1.1
         - annotorious-better-polygon-0.2.0
+- recogito now displays the tagset on top of the widget 
+- recogito now gains an extra argument annotations, which can be used to preload existing annotations
+- read_recogito provides a better default when no annotations have been done
+- renderRecogito and renderRecogitotagsonly now clear existing annotations
+- adding examples on showing annotations are deleted when you select a new text/image
 
 ### CHANGES IN recogito VERSION 0.1.2
 

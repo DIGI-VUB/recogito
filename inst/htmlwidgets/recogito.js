@@ -5,29 +5,31 @@ HTMLWidgets.widget({
     var formatter = function(annotation) {
       return "tag-".concat(annotation.body[0].value)
     }
+    var r = Recogito.init({
+      content: el.parentNode.id,
+      formatter: formatter,
+      readOnly: false
+    });
     return {
       renderValue: function(x) {
         el.innerText = x.text;
-        var r = Recogito.init({
-          content: el.parentNode.id,
-          mode: x.mode,
-          formatter: formatter,
-          widgets: [
-            'COMMENT',
-            { widget: 'TAG', vocabulary: x.tags }
-          ],
-          readOnly: false
-        });
+        r.setMode('ANNOTATION');
         r.on('updateAnnotation', function(a) {
           Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
         });
         r.on('createAnnotation', function(a) {
           Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
         });
-        //var toggleModeBtn = document.getElementById('toggle-mode');
+        r.on('deleteAnnotation', function(annotation) {
+          Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
+        });
+        r.clearAnnotations();
+        if(x.annotations != "{}" & x.annotations != '[""]'){
+            r.setAnnotations(JSON.parse(x.annotations))
+        }
+        Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
+        // Allow to switch between relation/annotation mode
         var toggleModeBtn = document.getElementById(el.id.concat("-toggle"));
-        //var annotationMode = 'ANNOTATION';
-        //r.setMode(annotationMode);
         annotationMode = toggleModeBtn.innerHTML;
         if (annotationMode === 'MODE: RELATIONS') {
           annotationMode = 'RELATIONS';
@@ -44,7 +46,38 @@ HTMLWidgets.widget({
           }
           r.setMode(annotationMode);
         });
-        //r.refresh();
+        // Quick selector widget showing buttons on top of the annotation widget
+        var tagSelectorWidget = function(args) {
+          // Triggers callbacks on user action
+          var addTag = function(evt) {
+            args.onAppendBody({
+              type: 'TextualBody',
+              purpose: 'tagging',
+              value: evt.target.dataset.tag
+            });
+          };
+          // Render the top buttons on top of the widget, using default shiny btn btn-default classes
+          var createButton = function(value) {
+            var button = document.createElement('button');
+            button.className = "btn btn-default";
+            button.dataset.tag = value;
+            button.textContent = value;
+            button.addEventListener('click', addTag);
+            return button;
+          };
+          var container = document.createElement('div');
+          container.className = 'tagset-quickselector-widget';
+          tagset = x.tags;
+          for (let i = 0; i < tagset.length; i++) {
+            container.appendChild(createButton(tagset[i]));
+          }
+          return container;
+        };
+        r.widgets = [
+            tagSelectorWidget,
+            { widget: 'COMMENT' },
+            { widget: 'TAG', vocabulary: x.tags }
+          ];
       },
       resize: function(width, height) {
       }
