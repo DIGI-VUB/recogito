@@ -103,7 +103,7 @@ library(recogito)
 url <- paste("https://upload.wikimedia.org/",
              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
              sep = "")
-ui <- fluidPage(annotoriousOutput(outputId = "anno"),
+ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
@@ -127,7 +127,7 @@ urls <- paste("https://upload.wikimedia.org/",
                 "wikipedia/commons/6/64/Cat_and_dog_standoff_\%283926784260\%29.jpg"),
               sep = "")
 ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
-                annotoriousOutput(outputId = "anno"),
+                annotoriousOutput(outputId = "anno", height = "600px"),
                 tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))

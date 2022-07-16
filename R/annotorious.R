@@ -60,8 +60,12 @@ widget_html.annotorious <- function(id, style, class, ...){
     tags$div(
       id = id,
       class = class,
-      htmltools::tags$img(id = sprintf("%s-img", id))
+      htmltools::tags$img(id = sprintf("%s-img", id), src = "")
   ))
+  el <- tags$div(
+    tags$p(tags$div(id = sprintf("%s-outer-container", id))),
+    tags$p(tags$div(id = id, class = class, style = style,
+                    htmltools::tags$img(id = sprintf("%s-img", id)))))
   el
 }
 
@@ -151,7 +155,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #' url <- paste("https://upload.wikimedia.org/",
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
 #'              sep = "")
-#' ui <- fluidPage(annotoriousOutput(outputId = "anno"),
+#' ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
 #'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
@@ -175,7 +179,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'                 "wikipedia/commons/6/64/Cat_and_dog_standoff_%283926784260%29.jpg"),
 #'               sep = "")
 #' ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
-#'                 annotoriousOutput(outputId = "anno"),
+#'                 annotoriousOutput(outputId = "anno", height = "600px"),
 #'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
