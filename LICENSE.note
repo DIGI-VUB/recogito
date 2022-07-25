@@ -90,14 +90,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 ------------------------------------------------------------------------------------------------------
-- File inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-shape-labels-0.2.2
-  extracted from recogito-client-plugins https://github.com/recogito/recogito-client-plugins/tree/main/packages/annotorious-shape-labels
-  Based on commit https://github.com/recogito/recogito-client-plugins/commit/baa1b94c865ab1df3f68925f04b3b371c9507cbb
+- Files at
+     - inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-shape-labels-0.2.2
+         extracted from recogito-client-plugins https://github.com/recogito/recogito-client-plugins/tree/main/packages/annotorious-shape-labels
+         based on commit https://github.com/recogito/recogito-client-plugins/commit/baa1b94c865ab1df3f68925f04b3b371c9507cbb
 - Files in subfolders:
     - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-better-polygon-0.2.0
     - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-openseadragon-2.6.0
     - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-shape-labels-0.2.4
     - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-toolbar-1.1.1
+    - inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-toolbar-1.1.1
 ------------------------------------------------------------------------------------------------------
 
 BSD 3-Clause License
