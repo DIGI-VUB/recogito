@@ -64,9 +64,13 @@ ocv_crop_annotorious <- function(data, bbox){
       area <- sf::st_polygon(list(x))
       area <- sf::st_sfc(area, crs = sf::NA_crs_)
       area <- sf::st_crop(area, bbox)
-      pts <- as.matrix(area[[1]])
-      colnames(pts) <- c("x", "y")
-      pts <- as.data.frame(pts)
+      if(length(area) > 0){
+        pts <- as.matrix(area[[1]])
+        colnames(pts) <- c("x", "y")
+        pts <- as.data.frame(pts)
+      }else{
+        pts <- data.frame(x = numeric(), y = numeric())
+      }
       pts
     })
   }
@@ -76,10 +80,14 @@ ocv_crop_annotorious <- function(data, bbox){
   ##
   toomuch     <- ifelse(data$x < 0, abs(data$x), 0)
   data$x      <- data$x + toomuch
-  data$width  <- ifelse(data$width > bbox[["xmax"]], bbox[["xmax"]], data$width - toomuch)
+  data$width  <- data$width - toomuch
+  toomuch     <- pmax(0, (data$x + data$width) - bbox[["xmax"]])
+  data$width  <- data$width - toomuch
   toomuch     <- ifelse(data$y < 0, abs(data$y), 0)
   data$y      <- data$y + toomuch
-  data$height <- ifelse(data$height > bbox[["ymax"]], bbox[["ymax"]], data$height - toomuch)
+  data$height <- data$height - toomuch
+  toomuch     <- pmax(0, (data$y + data$height) - bbox[["ymax"]])
+  data$height <- data$height - toomuch
   data$x      <- as.numeric(data$x)
   data$y      <- as.numeric(data$y)
   data$width  <- as.numeric(data$width)
