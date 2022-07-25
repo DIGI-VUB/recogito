@@ -10,29 +10,6 @@ Annotate text with your tags / Annotate areas of interests in images with your o
 
 ### Example on Image Annotation
 
-#### Basic image annotation
-
-![](tools/example-annotorious-shiny.gif)
-
-```r
-library(shiny)
-library(recogito)
-url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
-ui  <- fluidPage(annotoriousOutput(outputId = "anno"),
-                 tags$hr(),
-                 tags$h3("Results"),
-                 verbatimTextOutput(outputId = "annotation_result"))
-server <- function(input, output) {
-  output$anno <- renderAnnotorious({
-    annotorious("results", tags = c("IMAGE", "TEXT"), src = url)
-  })
-  output$annotation_result <- renderPrint({
-    read_annotorious(input$results)
-  })
-}
-shinyApp(ui, server)
-```
-
 #### Image annotation in **zoomable images** using openseadragon 
 
 - Note: press `Shift` and click on the image to select areas
@@ -52,6 +29,29 @@ ui  <- fluidPage(openseadragonOutput(outputId = "anno"),
 server <- function(input, output) {
   output$anno <- renderOpenSeaDragon({
     annotorious("results", tags = c("Vraag", "Antwoord"), src = url, type = "openseadragon")
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$results)
+  })
+}
+shinyApp(ui, server)
+```
+
+#### Basic image annotation - no zoomable images
+
+![](tools/example-annotorious-shiny.gif)
+
+```r
+library(shiny)
+library(recogito)
+url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
+ui  <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
+                 tags$hr(),
+                 tags$h3("Results"),
+                 verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  output$anno <- renderAnnotorious({
+    annotorious("results", tags = c("IMAGE", "TEXT"), src = url)
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$results)
