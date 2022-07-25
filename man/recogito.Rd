@@ -40,8 +40,6 @@ recogito(
 }
 \value{
 An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-that will intelligently print itself into HTML in a variety of contexts including the R console,
-within R Markdown documents, and within Shiny output bindings.
 }
 \description{
 Functionality to tag text with entities and relations between these

@@ -18,7 +18,12 @@ NULL
 #' @export
 #' @return \code{x} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
 #' @examples
-#' if(require(opencv)){
+#' \dontshow{
+#' if(require(opencv))
+#' \{
+#' }
+#'
+#' library(opencv)
 #' data(openseadragon_areas)
 #' url  <- attr(openseadragon_areas, "src")
 #' img  <- ocv_read(url)
@@ -34,6 +39,9 @@ NULL
 #' ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
 #' area <- x[3, ]
 #' ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
+#'
+#' \dontshow{
+#' \}
 #' }
 ocv_crop_annotorious <- function(data, bbox){
   if(missing(bbox)){

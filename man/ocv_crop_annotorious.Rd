@@ -18,7 +18,12 @@ ocv_crop_annotorious(data, bbox)
 Crop annotations to a bounding box
 }
 \examples{
-if(require(opencv)){
+\dontshow{
+if(require(opencv))
+\{
+}
+
+library(opencv)
 data(openseadragon_areas)
 url  <- attr(openseadragon_areas, "src")
 img  <- ocv_read(url)
@@ -34,5 +39,8 @@ area <- x[1, ]
 ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
 area <- x[3, ]
 ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
+
+\dontshow{
+\}
 }
 }

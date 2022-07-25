@@ -11,8 +11,6 @@
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param dependencies passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @return An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-#' that will intelligently print itself into HTML in a variety of contexts including the R console,
-#' within R Markdown documents, and within Shiny output bindings.
 #' @seealso \code{\link{recogito-shiny}}
 #' @export
 #' @examples

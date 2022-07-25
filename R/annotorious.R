@@ -10,8 +10,6 @@
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param dependencies passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @return An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-#' that will intelligently print itself into HTML in a variety of contexts including the R console,
-#' within R Markdown documents, and within Shiny output bindings.
 #' @seealso \code{\link{annotorious-shiny}}
 #' @export
 annotorious <- function(inputId = "annotations",
@@ -266,7 +264,10 @@ renderOpenSeaDragonNoToolbar <- function(expr, env = parent.frame(), quoted = FA
 #' anno <- read_annotorious(x, src = url)
 #' anno
 #'
-#' if(require(magick)){
+#' \dontshow{
+#' if(require(magick))
+#' \{
+#' }
 #' library(magick)
 #' img  <- image_read(url)
 #' area <- head(anno, n = 1)
@@ -283,6 +284,8 @@ renderOpenSeaDragonNoToolbar <- function(expr, env = parent.frame(), quoted = FA
 #' })
 #' allrectangles <- do.call(c, allrectangles)
 #' allrectangles
+#' \dontshow{
+#' \}
 #' }
 #'
 #'
@@ -312,11 +315,16 @@ renderOpenSeaDragonNoToolbar <- function(expr, env = parent.frame(), quoted = FA
 #' anno
 #' anno$polygon
 #'
-#' if(require(opencv)){
+#' \dontshow{
+#' if(require(opencv))
+#' \{
+#' }
 #' library(opencv)
 #' img  <- ocv_read(url)
 #' area <- subset(anno, type == "POLYGON")
 #' ocv_polygon(img, pts = area$polygon[[1]])
+#' \dontshow{
+#' \}
 #' }
 read_annotorious <- function(x, src = character()){
   default <- data.frame(id = character(), type = character(), label = I(list()), comment = I(list()), x = numeric(), y = numeric(), width = numeric(), height = numeric(), polygon = I(list()), stringsAsFactors = FALSE)

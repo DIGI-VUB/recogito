@@ -16,6 +16,7 @@
 - read_recogito provides a better default when no annotations have been done
 - renderRecogito and renderRecogitotagsonly now clear existing annotations
 - adding examples on showing annotations are deleted when you select a new text/image
+- added ocv_crop_annotorious
 
 ### CHANGES IN recogito VERSION 0.1.2
 
