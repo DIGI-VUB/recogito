@@ -43,17 +43,6 @@ within R Markdown documents, and within Shiny output bindings.
 \description{
 Functionality to label areas in images
 }
-\examples{
-url <- "https://www.w3schools.com/images/picture.jpg"
-annotorious(src = url)
-url <- paste("https://nl.wikipedia.org/wiki/",
-             "Hoofdpagina#/media/Bestand:Pamphlet_dutch_tulipomania_1637.jpg")
-url <- paste("https://upload.wikimedia.org/",
-             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-             sep = "")
-annotorious(src = url)
-annotorious(src = url, tags = c("Image", "Text", "Other"))
-}
 \seealso{
 \code{\link{annotorious-shiny}}
 }

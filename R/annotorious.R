@@ -14,16 +14,6 @@
 #' within R Markdown documents, and within Shiny output bindings.
 #' @seealso \code{\link{annotorious-shiny}}
 #' @export
-#' @examples
-#' url <- "https://www.w3schools.com/images/picture.jpg"
-#' annotorious(src = url)
-#' url <- paste("https://nl.wikipedia.org/wiki/",
-#'              "Hoofdpagina#/media/Bestand:Pamphlet_dutch_tulipomania_1637.jpg")
-#' url <- paste("https://upload.wikimedia.org/",
-#'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-#'              sep = "")
-#' annotorious(src = url)
-#' annotorious(src = url, tags = c("Image", "Text", "Other"))
 annotorious <- function(inputId = "annotations",
                         src,
                         tags = c("Cat", "Dog", "Person", "Other"),
