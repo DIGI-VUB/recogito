@@ -3,10 +3,9 @@
 Annotate text with your tags / Annotate areas of interests in images with your own labels
 
 - This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) and  [annotorious](https://github.com/recogito/annotorious).
-- The package allows to annotate text using **tags and relations between these tags**. 
-    - A common use case is for entity labelling and entity linking
-- Next you can use the package to **annotate areas of interest (rectangles / polygons) in images** with specific labels
-    - Handy for quick data preparation of images
+- The package allows to 
+    - **annotate text using tags and relations between these tags** (a common use case is for entity labelling and entity linking)
+    - **annotate areas of interest (rectangles / polygons) in images** with specific labels (handy for quick data preparation of images)
 
 ### Example on Image Annotation
 
@@ -37,7 +36,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
-#### Basic image annotation - no zoomable images
+#### Example on image annotation - no zoomable images
 
 ![](tools/example-annotorious-shiny.gif)
 
