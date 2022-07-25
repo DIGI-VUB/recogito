@@ -2,6 +2,7 @@
 
 export(annotorious)
 export(annotoriousOutput)
+export(ocv_crop_annotorious)
 export(openseadragonOutput)
 export(openseadragonOutputNoToolbar)
 export(read_annotorious)
@@ -19,3 +20,4 @@ importFrom(htmlwidgets,createWidget)
 importFrom(htmlwidgets,shinyRenderWidget)
 importFrom(htmlwidgets,shinyWidgetOutput)
 importFrom(jsonlite,fromJSON)
+importFrom(utils,head)
