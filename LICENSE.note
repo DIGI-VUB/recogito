@@ -46,15 +46,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 ------------------------------------------------------------------------------------------------------
-- annotorious (Files at inst/htmlwidgets/lib/annotorious-2.4.1 and inst/htmlwidgets/lib/annotorious-2.5.10
+- annotorious (Files at inst/htmlwidgets/lib/anno-2.4.1 and inst/htmlwidgets/lib/anno-2.5.10
   Based on release 2.4.1  https://github.com/recogito/annotorious/releases/tag/v2.4.1
   Based on release 2.5.10 https://github.com/recogito/annotorious/releases/tag/v2.5.10
   except files in subfolders:
-    - inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-shape-labels-0.2.2 (see below)
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-better-polygon-0.2.0 (see below)
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-openseadragon-2.6.0 (see below)
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-shape-labels-0.2.4 (see below)
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-toolbar-1.1.1 (see below)
+    - inst/htmlwidgets/lib/anno-2.4.1/a-shape-labels-0.2.2 (see below)
+    - inst/htmlwidgets/lib/anno-2.5.10/a-better-polygon-0.2.0 (see below)
+    - inst/htmlwidgets/lib/anno-2.5.10/a-openseadragon-2.6.0 (see below)
+    - inst/htmlwidgets/lib/anno-2.5.10/a-shape-labels-0.2.4 (see below)
+    - inst/htmlwidgets/lib/anno-2.5.10/a-toolbar-1.1.1 (see below)
 
 ------------------------------------------------------------------------------------------------------
 
@@ -91,15 +91,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ------------------------------------------------------------------------------------------------------
 - Files at
-     - inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-shape-labels-0.2.2
+     - inst/htmlwidgets/lib/anno-2.4.1/a-shape-labels-0.2.2
          extracted from recogito-client-plugins https://github.com/recogito/recogito-client-plugins/tree/main/packages/annotorious-shape-labels
          based on commit https://github.com/recogito/recogito-client-plugins/commit/baa1b94c865ab1df3f68925f04b3b371c9507cbb
 - Files in subfolders:
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-better-polygon-0.2.0
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-openseadragon-2.6.0
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-shape-labels-0.2.4
-    - inst/htmlwidgets/lib/annotorious-2.5.10/annotorious-toolbar-1.1.1
-    - inst/htmlwidgets/lib/annotorious-2.4.1/annotorious-toolbar-1.1.1
+    - inst/htmlwidgets/lib/anno-2.5.10/a-better-polygon-0.2.0
+    - inst/htmlwidgets/lib/anno-2.5.10/a-openseadragon-2.6.0
+    - inst/htmlwidgets/lib/anno-2.5.10/a-shape-labels-0.2.4
+    - inst/htmlwidgets/lib/anno-2.5.10/a-toolbar-1.1.1
+    - inst/htmlwidgets/lib/anno-2.4.1/a-toolbar-1.1.1
 ------------------------------------------------------------------------------------------------------
 
 BSD 3-Clause License
