@@ -117,13 +117,10 @@ ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
 
 server <- function(input, output) {
   output$annotation_text <- renderRecogito({
-    recogito("annotations", text = txt, tags = tagset)
+    recogito(inputId = "annotations", text = txt, tags = tagset)
   })
   output$annotation_result <- renderPrint({
-    if(length(input$annotations) > 0){
-      x <- read_recogito(input$annotations)
-      x
-    }
+    read_recogito(input$annotations)
   })
 }
 shinyApp(ui, server)
