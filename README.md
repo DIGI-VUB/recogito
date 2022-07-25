@@ -43,17 +43,32 @@ shinyApp(ui, server)
 ```r
 library(shiny)
 library(recogito)
+library(magick)
+library(opencv)
 url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
 ui  <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
-                 tags$hr(),
                  tags$h3("Results"),
-                 verbatimTextOutput(outputId = "annotation_result"))
+                 verbatimTextOutput(outputId = "annotation_result"),
+                 tags$h3("Areas of interest"),
+                 plotOutput(outputId = "annotation_areas"))
 server <- function(input, output) {
+  current_image <- reactiveValues(img = ocv_read(url))
   output$anno <- renderAnnotorious({
     annotorious(inputId = "results", tags = c("IMAGE", "TEXT"), src = url)
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$results)
+  })
+  output$annotation_areas <- renderPlot({
+    x        <- read_annotorious(input$results)
+    if(nrow(x) > 0){
+      ## Extract the selected polygons and put them below each other
+      areas    <- ocv_read_annotorious(data = x, image = current_image$img)
+      overview <- lapply(areas, FUN = function(x) image_read(ocv_bitmap(x)))
+      overview <- lapply(overview, image_border)
+      overview <- image_append(do.call(c, overview), stack = TRUE)
+      image_ggplot(overview)
+    }
   })
 }
 shinyApp(ui, server)

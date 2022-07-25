@@ -3,6 +3,7 @@
 export(annotorious)
 export(annotoriousOutput)
 export(ocv_crop_annotorious)
+export(ocv_read_annotorious)
 export(openseadragonOutput)
 export(openseadragonOutputNoToolbar)
 export(read_annotorious)

@@ -103,3 +103,58 @@ ocv_crop_annotorious <- function(data, bbox){
 
   data
 }
+
+
+#' @title Extract the areas of interests of an image
+#' @description Extract the areas of interests of an image
+#' @param data an object as returned by \code{\link{read_annotorious}}
+#' @param image an ocv image object
+#' @export
+#' @return a list of ocv images with the extracted areas of interest
+#' @examples
+#' \dontshow{
+#' if(require(opencv) && require(magick))
+#' \{
+#' }
+#'
+#' library(opencv)
+#' library(magick)
+#' data(openseadragon_areas)
+#' url  <- attr(openseadragon_areas, "src")
+#' img  <- ocv_read(url)
+#'
+#' areas <- ocv_read_annotorious(data = openseadragon_areas, image = img)
+#' areas[[1]]
+#' areas[[2]]
+#' img <- lapply(areas, FUN = function(x) image_read(ocv_bitmap(x)))
+#' img <- do.call(c, img)
+#' img <- image_append(img, stack = FALSE)
+#' image_resize(img, "x200")
+#' \dontshow{
+#' \}
+#' }
+ocv_read_annotorious <- function(data, image){
+  if(!requireNamespace("opencv")){
+    stop("Install packages opencv to extract the areas of interest")
+  }
+  if(missing(image)){
+    url <- attr(data, "src")
+    if(is.null(url)){
+      stop("Please provide a bbox")
+    }
+    image <- opencv::ocv_read(url)
+  }
+  stopifnot(inherits(image, "opencv-image"))
+  bbox <- opencv::ocv_info(image)
+  bbox <- c(xmin = 0, ymin = 0, xmax = bbox$width - 1, ymax = bbox$height - 1)
+  data <- ocv_crop_annotorious(data, bbox)
+  ## Loop over all annotations, extract polygons or rectangles
+  lapply(seq_len(nrow(data)), FUN = function(i){
+    type <- data$type[i]
+    if(type == "POLYGON"){
+      opencv::ocv_polygon(image, pts = data$polygon[[i]], crop = TRUE)
+    }else if(type == "RECTANGLE"){
+      opencv::ocv_rectangle(image, x = data$x[i], y = data$y[i], width = data$width[i], height = data$height[i])
+    }
+  })
+}

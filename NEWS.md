@@ -17,6 +17,7 @@
 - renderRecogito and renderRecogitotagsonly now clear existing annotations
 - adding examples on showing annotations are deleted when you select a new text/image
 - added ocv_crop_annotorious
+- added ocv_read_annotorious
 
 ### CHANGES IN recogito VERSION 0.1.2
 
