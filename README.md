@@ -4,8 +4,8 @@ Annotate text with your tags / Annotate areas of interests in images with your o
 
 - This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) and  [annotorious](https://github.com/recogito/annotorious).
 - The package allows to 
-    - **annotate text using tags and relations between these tags** (a common use case is for entity labelling and entity linking)
-    - **annotate areas of interest (rectangles / polygons) in images** with specific labels (handy for quick data preparation of images)
+    - **annotate *text* using tags and relations between these tags** (for entity labelling / entity linking)
+    - **annotate areas of interest (rectangles / polygons) in *images*** with specific labels
 
 ### Example on Image Annotation
 
