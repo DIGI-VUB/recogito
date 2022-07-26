@@ -25,8 +25,9 @@ ui  <- fluidPage(openseadragonOutput(outputId = "anno", height = "700px"),
                  tags$h3("Results"),
                  verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
+  current_image <- reactiveValues(url = url)
   output$anno <- renderOpenSeaDragon({
-    annotorious(inputId = "results", tags = c("Vraag", "Antwoord"), src = url, type = "openseadragon")
+    annotorious(inputId = "results", tags = c("Vraag", "Antwoord"), src = current_image$url, type = "openseadragon")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$results)
