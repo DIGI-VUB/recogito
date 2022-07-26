@@ -52,9 +52,9 @@ ui  <- fluidPage(fluidRow(
                  tags$h3("Results"),
                  verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
-  current_image <- reactiveValues(img = ocv_read(url))
+  current_image <- reactiveValues(img = ocv_read(url), url = url)
   output$anno <- renderAnnotorious({
-    annotorious(inputId = "results", tags = c("IMAGE", "TEXT"), src = url)
+    annotorious(inputId = "results", tags = c("IMAGE", "TEXT"), src = current_image$url)
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$results)
