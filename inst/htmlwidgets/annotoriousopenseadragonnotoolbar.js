@@ -21,6 +21,7 @@ HTMLWidgets.widget({
     return {
       renderValue: function(x) {
         anno.clearAnnotations();
+        Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         viewer.open({
             type: "image",
             url: x.src
