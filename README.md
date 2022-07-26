@@ -110,28 +110,20 @@ settled that he should go back to Ithaca; even then, however, when he was among 
 were not yet over; nevertheless all the gods had now begun to pity him except Neptune, who still persecuted
 him without ceasing and would not let him get home."
 
-tagset    <- c("LOCATION", "TIME", "PERSON")
 tagstyles <- "
-.tag-PERSON {
-color:red;
-}
-.tag-LOCATION {
-background-color:green;
-}
-.tag-TIME {
-font-weight: bold;
-}
+.tag-PERSON   { color:red; }
+.tag-LOCATION { background-color:green; }
+.tag-TIME     { font-weight: bold; }
 "
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 tags$br(),
                 recogitoOutput(outputId = "annotation_text"),
-                tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 
 server <- function(input, output) {
   output$annotation_text <- renderRecogito({
-    recogito(inputId = "annotations", text = txt, tags = tagset)
+    recogito(inputId = "annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
   })
   output$annotation_result <- renderPrint({
     read_recogito(input$annotations)
