@@ -12,7 +12,7 @@ ocv_crop_annotorious(data, bbox)
 \item{bbox}{a vector with elements x, y, xmax, ymax}
 }
 \value{
-\code{x} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
+\code{data} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
 }
 \description{
 Crop annotations to a bounding box

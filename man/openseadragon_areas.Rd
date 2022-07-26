@@ -4,9 +4,6 @@
 \name{openseadragon_areas}
 \alias{openseadragon_areas}
 \title{A dataset of annotations using openseadragon}
-\value{
-\code{x} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
-}
 \description{
 A dataset of annotations using openseadragon
 }

@@ -4,7 +4,6 @@
 #' @description A dataset of annotations using openseadragon
 #' @name openseadragon_areas
 #' @docType data
-#' @return \code{x} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
 #' @examples
 #' data(openseadragon_areas)
 #' openseadragon_areas
@@ -16,7 +15,7 @@ NULL
 #' @param data an object as returned by \code{\link{read_annotorious}}
 #' @param bbox a vector with elements x, y, xmax, ymax
 #' @export
-#' @return \code{x} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
+#' @return \code{data} where column \code{polygon} and the rectangle information in \code{x, y, width, height} is limited to the provided bounding box
 #' @examples
 #' \dontshow{
 #' if(require(opencv))

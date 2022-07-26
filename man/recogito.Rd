@@ -18,7 +18,7 @@ recogito(
 )
 }
 \arguments{
-\item{inputId}{The input slot that will be used to access the value}
+\item{inputId}{character string with the name to use where annotations will be put into}
 
 \item{text}{character string with the text to annotate}
 

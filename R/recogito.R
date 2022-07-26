@@ -1,6 +1,6 @@
 #' @title Annotate text with tags and relations
 #' @description Functionality to tag text with entities and relations between these
-#' @param inputId The input slot that will be used to access the value
+#' @param inputId character string with the name to use where annotations will be put into
 #' @param text character string with the text to annotate
 #' @param type either 'relations' or 'tags' in order to label relations between tags or only plain tags
 #' @param tags character vector of possible tags
