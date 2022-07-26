@@ -14,7 +14,7 @@
 #' @export
 annotorious <- function(inputId = "annotations",
                         src,
-                        tags = c("Cat", "Dog", "Person", "Other"),
+                        tags = c(),
                         type = c("default", "openseadragon", "openseadragon-notoolbar"),
                         quickselector = TRUE,
                         width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
@@ -87,23 +87,6 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #' @examples
 #' if(interactive() && require(shiny)){
 #' ##
-#' ## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
-#' ## showing how to load a local image
-#' ##
-#' library(shiny)
-#' library(recogito)
-#' url <- system.file(package = "recogito", "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
-#' addResourcePath(prefix = "img", directoryPath = dirname(url))
-#' ui <- fluidPage(openseadragonOutputNoToolbar(outputId = "anno", width = "100%", height = "250px"))
-#' server <- function(input, output) {
-#'   output$anno <- renderOpenSeaDragonNoToolbar({
-#'     annotorious("annotations", src = sprintf("img/%s", basename(url)),
-#'                  type = "openseadragon-notoolbar")
-#'   })
-#' }
-#' shinyApp(ui, server)
-#'
-#' ##
 #' ## Annotorious using OpenSeaDragon, allowing to zoom in,
 #' ## to select an area, press shift and next select the area
 #' ##
@@ -132,6 +115,22 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #' }
 #' shinyApp(ui, server)
 #'
+#' ##
+#' ## Annotorious using OpenSeaDragon, allowing to zoom in, no selection possibilities
+#' ## showing how to load a local image
+#' ##
+#' library(shiny)
+#' library(recogito)
+#' url <- system.file(package = "recogito", "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+#' addResourcePath(prefix = "img", directoryPath = dirname(url))
+#' ui <- fluidPage(openseadragonOutputNoToolbar(outputId = "anno", width = "100%", height = "250px"))
+#' server <- function(input, output) {
+#'   output$anno <- renderOpenSeaDragonNoToolbar({
+#'     annotorious("annotations", src = sprintf("img/%s", basename(url)),
+#'                  type = "openseadragon-notoolbar")
+#'   })
+#' }
+#' shinyApp(ui, server)
 #'
 #' ##
 #' ## Annotorious without openseadragon

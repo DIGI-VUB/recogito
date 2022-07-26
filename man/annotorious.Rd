@@ -7,7 +7,7 @@
 annotorious(
   inputId = "annotations",
   src,
-  tags = c("Cat", "Dog", "Person", "Other"),
+  tags = c(),
   type = c("default", "openseadragon", "openseadragon-notoolbar"),
   quickselector = TRUE,
   width = NULL,
