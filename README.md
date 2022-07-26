@@ -45,11 +45,11 @@ library(recogito)
 library(magick)
 library(opencv)
 url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
-ui  <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
+ui  <- fluidPage(fluidRow(
+                   column(width = 7, annotoriousOutput(outputId = "anno", height = "600px")), 
+                   column(width = 5, plotOutput(outputId = "annotation_areas", height = "600px"))),
                  tags$h3("Results"),
-                 verbatimTextOutput(outputId = "annotation_result"),
-                 tags$h3("Areas of interest"),
-                 plotOutput(outputId = "annotation_areas"))
+                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
   current_image <- reactiveValues(img = ocv_read(url))
   output$anno <- renderAnnotorious({
@@ -61,7 +61,7 @@ server <- function(input, output) {
   output$annotation_areas <- renderPlot({
     x        <- read_annotorious(input$results)
     if(nrow(x) > 0){
-      ## Extract the selected polygons and put them below each other
+      ## Extract the selected polygons and put them below each other so show the selections in annotation_areas
       areas    <- ocv_read_annotorious(data = x, image = current_image$img)
       overview <- lapply(areas, FUN = function(x) image_read(ocv_bitmap(x)))
       overview <- lapply(overview, image_border)
