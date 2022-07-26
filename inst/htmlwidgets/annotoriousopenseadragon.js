@@ -21,7 +21,8 @@ HTMLWidgets.widget({
     });
     Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
     Annotorious.BetterPolygon(anno);
-
+    // Default to rectangle annotation
+    anno.setDrawingTool('rect');
     return {
       renderValue: function(x) {
         // Quick selector widget showing buttons on top of the annotation widget
@@ -51,19 +52,25 @@ HTMLWidgets.widget({
           }
           return container;
         };
-        if(x.quickselector === true){
+        if (x.tags === null){
           anno.widgets = [
-            tagSelectorWidget,
             { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: x.tags }
+            { widget: 'TAG' }
           ];
         }else{
-          anno.widgets = [
-            { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: x.tags }
-          ];
+          if(x.quickselector === true){
+            anno.widgets = [
+              tagSelectorWidget,
+              { widget: 'COMMENT' },
+              { widget: 'TAG', vocabulary: x.tags }
+            ];
+          }else{
+            anno.widgets = [
+              { widget: 'COMMENT' },
+              { widget: 'TAG', vocabulary: x.tags }
+            ];
+          }
         }
-
         anno.clearAnnotations();
         Shiny.setInputValue(x.inputId, JSON.stringify(anno.getAnnotations()));
         viewer.open({

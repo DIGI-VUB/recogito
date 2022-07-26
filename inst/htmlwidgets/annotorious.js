@@ -9,6 +9,8 @@ HTMLWidgets.widget({
       formatter: Annotorious.ShapeLabelsFormatter()
     });
     Annotorious.Toolbar(anno, document.getElementById(el.id.concat("-outer-container")));
+    // Default to rectangle annotation
+    anno.setDrawingTool('rect');
     return {
       renderValue: function(x) {
         anno.on('createAnnotation', function(a) {
@@ -58,11 +60,18 @@ HTMLWidgets.widget({
           }
           return container;
         };
-        anno.widgets = [
+        if (x.tags === null){
+          anno.widgets = [
+            { widget: 'COMMENT' },
+            { widget: 'TAG' }
+          ];
+        }else{
+          anno.widgets = [
             { widget: 'COMMENT' },
             { widget: 'TAG', vocabulary: tagset },
             tagSelectorWidget
           ];
+        }
         anno.refresh();
       },
       resize: function(width, height) {
