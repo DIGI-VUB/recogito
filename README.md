@@ -44,6 +44,7 @@ library(shiny)
 library(recogito)
 library(magick)
 library(opencv)
+library(sf)
 url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
 ui  <- fluidPage(fluidRow(
                    column(width = 7, annotoriousOutput(outputId = "anno", height = "600px")), 
