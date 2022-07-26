@@ -8,7 +8,7 @@ annotorious(
   inputId = "annotations",
   src,
   tags = c(),
-  type = c("default", "openseadragon", "openseadragon-notoolbar"),
+  type = c("annotorious", "openseadragon", "openseadragon-notoolbar"),
   quickselector = TRUE,
   width = NULL,
   height = NULL,
@@ -23,7 +23,7 @@ annotorious(
 
 \item{tags}{character vector of possible labels you want to use}
 
-\item{type}{either \code{'default'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar}
+\item{type}{either \code{'annotorious'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar}
 
 \item{quickselector}{logical indicating if for type \code{'openseadragon'} the possible tags should be shows as quick buttons to click. Defaults to \code{TRUE}.}
 

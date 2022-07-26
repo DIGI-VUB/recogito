@@ -105,7 +105,7 @@ ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
   output$anno <- renderAnnotorious({
-    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "annotorious")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$annotations)
@@ -133,7 +133,7 @@ server <- function(input, output) {
   })
   output$anno <- renderAnnotorious({
     info <- current_image()
-    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url)
+    annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url, type = "annotorious")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$annotations)

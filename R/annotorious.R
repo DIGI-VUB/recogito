@@ -3,7 +3,7 @@
 #' @param inputId character string with the name to use where annotations will be put into
 #' @param src character string with the image/url to annotate
 #' @param tags character vector of possible labels you want to use
-#' @param type either \code{'default'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar
+#' @param type either \code{'annotorious'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar
 #' @param quickselector logical indicating if for type \code{'openseadragon'} the possible tags should be shows as quick buttons to click. Defaults to \code{TRUE}.
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
@@ -15,7 +15,7 @@
 annotorious <- function(inputId = "annotations",
                         src,
                         tags = c(),
-                        type = c("default", "openseadragon", "openseadragon-notoolbar"),
+                        type = c("annotorious", "openseadragon", "openseadragon-notoolbar"),
                         quickselector = TRUE,
                         width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
@@ -28,7 +28,7 @@ annotorious <- function(inputId = "annotations",
     quickselector = quickselector,
     opts = list(type = type)
   )
-  if(type %in% "default"){
+  if(type %in% "annotorious"){
     htmlwidgets::createWidget(name = 'annotorious', x, width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
   }else if(type %in% "openseadragon"){
     htmlwidgets::createWidget(name = 'annotoriousopenseadragon', x, width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
@@ -145,7 +145,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
 #'   output$anno <- renderAnnotorious({
-#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url)
+#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = url, type = "annotorious")
 #'   })
 #'   output$annotation_result <- renderPrint({
 #'     read_annotorious(input$annotations)
@@ -173,7 +173,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'   })
 #'   output$anno <- renderAnnotorious({
 #'     info <- current_image()
-#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url)
+#'     annotorious("annotations", tags = c("IMAGE", "TEXT"), src = info$url, type = "annotorious")
 #'   })
 #'   output$annotation_result <- renderPrint({
 #'     read_annotorious(input$annotations)
