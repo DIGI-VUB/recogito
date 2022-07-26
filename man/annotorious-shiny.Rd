@@ -38,12 +38,11 @@ is useful if you want to save an expression in a variable.}
 }
 \value{
 An output element for use in a Shiny user interface.\cr
-Consisting of a toggle button to switch between rectangle / polygon mode (id: \code{outputId}\code{-toggle}) and
+Consisting of a toggle button to switch between rectangle / polygon mode and
 the html-widget (id: \code{outputId}) which contains an image (id: \code{outputId}\code{-img})
 }
 \description{
-Output and render functions for using annotorious within Shiny
-applications and interactive Rmd documents.
+Output and render functions for using annotorious within Shiny applications.
 }
 \examples{
 if(interactive() && require(shiny)){
@@ -76,7 +75,6 @@ urls <- paste("https://upload.wikimedia.org/",
               sep = "")
 ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
                 openseadragonOutput(outputId = "anno"),
-                tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
@@ -104,7 +102,6 @@ url <- paste("https://upload.wikimedia.org/",
              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
              sep = "")
 ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
-                tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
@@ -128,7 +125,6 @@ urls <- paste("https://upload.wikimedia.org/",
               sep = "")
 ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
                 annotoriousOutput(outputId = "anno", height = "600px"),
-                tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {

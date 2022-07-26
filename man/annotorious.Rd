@@ -17,13 +17,13 @@ annotorious(
 )
 }
 \arguments{
-\item{inputId}{The input slot that will be used to access the value}
+\item{inputId}{character string with the name to use where annotations will be put into}
 
 \item{src}{character string with the image/url to annotate}
 
 \item{tags}{character vector of possible labels you want to use}
 
-\item{type}{either 'default', 'openseadragon', 'openseadragon-notoolbar' in order to allow zooming with openseadragon or not, with or without a toolbar}
+\item{type}{either \code{'default'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar}
 
 \item{quickselector}{logical indicating if for type \code{'openseadragon'} the possible tags should be shows as quick buttons to click. Defaults to \code{TRUE}.}
 

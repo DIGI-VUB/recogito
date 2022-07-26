@@ -1,9 +1,9 @@
 #' @title Annotate images with areas of interest
 #' @description Functionality to label areas in images
-#' @param inputId The input slot that will be used to access the value
+#' @param inputId character string with the name to use where annotations will be put into
 #' @param src character string with the image/url to annotate
 #' @param tags character vector of possible labels you want to use
-#' @param type either 'default', 'openseadragon', 'openseadragon-notoolbar' in order to allow zooming with openseadragon or not, with or without a toolbar
+#' @param type either \code{'default'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar
 #' @param quickselector logical indicating if for type \code{'openseadragon'} the possible tags should be shows as quick buttons to click. Defaults to \code{TRUE}.
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
@@ -70,8 +70,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 }
 
 #' @title Shiny bindings for annotorious
-#' @description Output and render functions for using annotorious within Shiny
-#' applications and interactive Rmd documents.
+#' @description Output and render functions for using annotorious within Shiny applications.
 #' @param outputId output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
@@ -82,7 +81,7 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'   is useful if you want to save an expression in a variable.
 #' @name annotorious-shiny
 #' @return An output element for use in a Shiny user interface.\cr
-#' Consisting of a toggle button to switch between rectangle / polygon mode (id: \code{outputId}\code{-toggle}) and
+#' Consisting of a toggle button to switch between rectangle / polygon mode and
 #' the html-widget (id: \code{outputId}) which contains an image (id: \code{outputId}\code{-img})
 #' @export
 #' @examples
@@ -116,7 +115,6 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'               sep = "")
 #' ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
 #'                 openseadragonOutput(outputId = "anno"),
-#'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
@@ -144,7 +142,6 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
 #'              sep = "")
 #' ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
-#'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
@@ -168,7 +165,6 @@ widget_html.annotoriousopenseadragonnotoolbar <- function(id, style, class, ...)
 #'               sep = "")
 #' ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
 #'                 annotoriousOutput(outputId = "anno", height = "600px"),
-#'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
