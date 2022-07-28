@@ -1,0 +1,23 @@
+dependencies:
+  - name: openseadragon
+    version: 2.4.2
+    src: htmlwidgets/lib/openseadragon-2.4.2
+    script:
+      - openseadragon.min.js
+  - name: annotoriousopenseadragon
+    version: 2.5.10
+    src: htmlwidgets/lib/anno-2.5.10
+    stylesheet:
+      - annotorious.min.css
+    script:
+      - a-openseadragon-2.6.0/openseadragon-annotorious.min.js
+      - annotorious.min.js
+      - a-shape-labels-0.2.4/annotorious-shape-labels.min.js
+      - a-toolbar-1.1.1/annotorious-toolbar.min.js
+      - a-better-polygon-0.2.0/annotorious-better-polygon.js
+
+
+
+
+
+

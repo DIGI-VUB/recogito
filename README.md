@@ -3,26 +3,31 @@
 Annotate text with your tags / Annotate areas of interests in images with your own labels
 
 - This repository contains an R package which provides a [htmlwidget](https://www.htmlwidgets.org) library for [recogito-js](https://github.com/recogito/recogito-js) and  [annotorious](https://github.com/recogito/annotorious).
-- The package allows to annotate text using **tags and relations between these tags**. 
-    - A common use case is for entity labelling and entity linking
-- Next you can use the package to **annotate areas of interest (rectangles / polygons) in images** with specific labels
-    - Handy for quick data preparation of images
+- The package allows to 
+    - **annotate *text* using tags and relations between these tags** (for entity labelling / entity linking)
+    - **annotate areas of interest (rectangles / polygons) in *images*** with specific labels
 
 ### Example on Image Annotation
 
-![](tools/example-annotorious-shiny.gif)
+#### Image annotation in **zoomable images** using openseadragon 
+
+- Note: press `Shift` and click on the image to select areas
+
+![](tools/example-openseadragon.png)
+
 
 ```r
 library(shiny)
 library(recogito)
 url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
-ui  <- fluidPage(annotoriousOutput(outputId = "anno"),
-                 tags$hr(),
+url <- "https://iiif.ghentcdh.ugent.be/iiif/images/getuigenissen:brugse_vrije:RABrugge_I15_16999_V02:RABrugge_I15_16999_V02_01/full/full/0/default.jpg"
+ui  <- fluidPage(openseadragonOutput(outputId = "anno", height = "700px"),
                  tags$h3("Results"),
                  verbatimTextOutput(outputId = "annotation_result"))
 server <- function(input, output) {
-  output$anno <- renderAnnotorious({
-    annotorious("results", tags = c("IMAGE", "TEXT"), src = url)
+  current_image <- reactiveValues(url = url)
+  output$anno <- renderOpenSeaDragon({
+    annotorious(inputId = "results", tags = c("Vraag", "Antwoord"), src = current_image$url, type = "openseadragon")
   })
   output$annotation_result <- renderPrint({
     read_annotorious(input$results)
@@ -30,6 +35,47 @@ server <- function(input, output) {
 }
 shinyApp(ui, server)
 ```
+
+#### Example on image annotation - no zoomable images
+
+![](tools/example-annotorious-shiny.gif)
+
+```r
+library(shiny)
+library(recogito)
+library(magick)
+library(opencv)
+library(sf)
+url <- "https://upload.wikimedia.org/wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg"
+ui  <- fluidPage(fluidRow(
+                   column(width = 7, annotoriousOutput(outputId = "anno", height = "600px")), 
+                   column(width = 5, plotOutput(outputId = "annotation_areas", height = "600px"))),
+                 tags$h3("Results"),
+                 verbatimTextOutput(outputId = "annotation_result"))
+server <- function(input, output) {
+  current_image <- reactiveValues(img = ocv_read(url), url = url)
+  output$anno <- renderAnnotorious({
+    annotorious(inputId = "results", tags = c("IMAGE", "TEXT"), src = current_image$url, type = "annotorious")
+  })
+  output$annotation_result <- renderPrint({
+    read_annotorious(input$results)
+  })
+  output$annotation_areas <- renderPlot({
+    x        <- read_annotorious(input$results)
+    if(nrow(x) > 0){
+      ## Extract the selected polygons and put them below each other so show the selections in annotation_areas
+      areas    <- ocv_read_annotorious(data = x, image = current_image$img)
+      overview <- lapply(areas, FUN = function(x) image_read(ocv_bitmap(x)))
+      overview <- lapply(overview, image_border)
+      overview <- image_append(do.call(c, overview), stack = TRUE)
+      image_ggplot(overview)
+    }
+  })
+}
+shinyApp(ui, server)
+```
+
+
 
 ### Example on Text Annotation
 
@@ -66,34 +112,23 @@ settled that he should go back to Ithaca; even then, however, when he was among 
 were not yet over; nevertheless all the gods had now begun to pity him except Neptune, who still persecuted
 him without ceasing and would not let him get home."
 
-tagset    <- c("LOCATION", "TIME", "PERSON")
 tagstyles <- "
-.tag-PERSON {
-color:red;
-}
-.tag-LOCATION {
-background-color:green;
-}
-.tag-TIME {
-font-weight: bold;
-}
+.tag-PERSON   { color:red; }
+.tag-LOCATION { background-color:green; }
+.tag-TIME     { font-weight: bold; }
 "
 ui <- fluidPage(tags$head(tags$style(HTML(tagstyles))),
                 tags$br(),
                 recogitoOutput(outputId = "annotation_text"),
-                tags$hr(),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
 
 server <- function(input, output) {
   output$annotation_text <- renderRecogito({
-    recogito("annotations", text = txt, tags = tagset)
+    recogito(inputId = "annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
   })
   output$annotation_result <- renderPrint({
-    if(length(input$annotations) > 0){
-      x <- read_recogito(input$annotations)
-      x
-    }
+    read_recogito(input$annotations)
   })
 }
 shinyApp(ui, server)

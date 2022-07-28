@@ -10,6 +10,7 @@ recogito(
   type = c("relations", "tags"),
   tags = c("Location", "Person", "Place", "Other"),
   mode = c("html", "pre"),
+  annotations = "{}",
   width = NULL,
   height = NULL,
   elementId = NULL,
@@ -17,7 +18,7 @@ recogito(
 )
 }
 \arguments{
-\item{inputId}{The input slot that will be used to access the value}
+\item{inputId}{character string with the name to use where annotations will be put into}
 
 \item{text}{character string with the text to annotate}
 
@@ -26,6 +27,8 @@ recogito(
 \item{tags}{character vector of possible tags}
 
 \item{mode}{either 'html' or 'pre'}
+
+\item{annotations}{character string with a predefined set of annotations}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 
@@ -37,8 +40,6 @@ recogito(
 }
 \value{
 An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-that will intelligently print itself into HTML in a variety of contexts including the R console,
-within R Markdown documents, and within Shiny output bindings.
 }
 \description{
 Functionality to tag text with entities and relations between these

@@ -46,7 +46,10 @@ x <- '[
 anno <- read_annotorious(x, src = url)
 anno
 
-if(require(magick)){
+\dontshow{
+if(require(magick))
+\{
+}
 library(magick)
 img  <- image_read(url)
 area <- head(anno, n = 1)
@@ -63,6 +66,8 @@ allrectangles <- Map(
 })
 allrectangles <- do.call(c, allrectangles)
 allrectangles
+\dontshow{
+\}
 }
 
 
@@ -92,10 +97,15 @@ anno <- read_annotorious(x, src = url)
 anno
 anno$polygon
 
-if(require(opencv)){
+\dontshow{
+if(require(opencv))
+\{
+}
 library(opencv)
 img  <- ocv_read(url)
 area <- subset(anno, type == "POLYGON")
 ocv_polygon(img, pts = area$polygon[[1]])
+\dontshow{
+\}
 }
 }
