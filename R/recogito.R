@@ -1,17 +1,16 @@
 #' @title Annotate text with tags and relations
 #' @description Functionality to tag text with entities and relations between these
-#' @param inputId The input slot that will be used to access the value
+#' @param inputId character string with the name to use where annotations will be put into
 #' @param text character string with the text to annotate
 #' @param type either 'relations' or 'tags' in order to label relations between tags or only plain tags
 #' @param tags character vector of possible tags
 #' @param mode either 'html' or 'pre'
+#' @param annotations character string with a predefined set of annotations
 #' @param width passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param height passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param elementId passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @param dependencies passed on to \code{\link[htmlwidgets]{createWidget}}
 #' @return An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-#' that will intelligently print itself into HTML in a variety of contexts including the R console,
-#' within R Markdown documents, and within Shiny output bindings.
 #' @seealso \code{\link{recogito-shiny}}
 #' @export
 #' @examples
@@ -52,12 +51,13 @@ recogito <- function(inputId = "annotations",
                      text,
                      type = c("relations", "tags"),
                      tags = c("Location", "Person", "Place", "Other"),
-                     mode = c("html", "pre"), width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
+                     mode = c("html", "pre"),
+                     annotations = "{}", width = NULL, height = NULL, elementId = NULL, dependencies = NULL) {
   type <- match.arg(type)
   mode <- match.arg(mode)
   x <- list(inputId = inputId, text = text, tags = tags, type = type,
             #path = tempfile(pattern = "annotations_", fileext = ".json"),
-            mode = mode)
+            mode = mode, annotations = annotations)
   if(type == "relations"){
     htmlwidgets::createWidget(name = 'recogito', x,
                               width = width, height = height, package = 'recogito', elementId = elementId, dependencies = dependencies)
@@ -120,22 +120,48 @@ widget_html.recogitotagsonly <- function(id, style, class, ...){
 #' @examples
 #' if(interactive() && require(shiny)){
 #'
+#' ##
+#' ## Tagging only, no relations
+#' ##
 #' library(shiny)
 #' library(recogito)
 #' txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
-#' ui <- fluidPage(recogitoOutput(outputId = "annotation_text"),
+#' ui <- fluidPage(tags$h3("Provide some text to annotate"),
+#'                 textAreaInput(inputId = "ui_text", label = "Provide some text", value = txt),
+#'                 tags$h3("Annotation area"),
+#'                 recogitotagsonlyOutput(outputId = "annotation_text"),
 #'                 tags$hr(),
 #'                 tags$h3("Results"),
 #'                 verbatimTextOutput(outputId = "annotation_result"))
 #' server <- function(input, output) {
 #'   output$annotation_text <- renderRecogitotagsonly({
-#'     recogito("annotations", text = txt, tags = c("LOCATION", "TIME", "PERSON"))
+#'     recogito("annotations", text = input$ui_text, tags = c("LOCATION", "TIME", "PERSON"))
 #'   })
 #'   output$annotation_result <- renderPrint({
-#'     if(length(input$annotations) > 0){
-#'       x <- read_recogito(input$annotations)
-#'       x
-#'     }
+#'     read_recogito(input$annotations)
+#'   })
+#' }
+#' shinyApp(ui, server)
+#'
+#' ##
+#' ## Tagging and relations
+#' ##
+#' library(shiny)
+#' library(recogito)
+#' txt <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
+#' ui <- fluidPage(tags$h3("Provide some text to annotate"),
+#'                 textAreaInput(inputId = "ui_text", label = "Provide some text", value = txt),
+#'                 tags$h3("Annotation area"),
+#'                 recogitoOutput(outputId = "annotation_text"),
+#'                 tags$hr(),
+#'                 tags$h3("Results"),
+#'                 verbatimTextOutput(outputId = "annotation_result"))
+#' server <- function(input, output) {
+#'   output$annotation_text <- renderRecogito({
+#'     recogito("annotations", text = input$ui_text, tags = c("LOCATION", "TIME", "PERSON"))
+#'   })
+#'   output$annotation_result <- renderPrint({
+#'     read_recogito(input$annotations)
 #'   })
 #' }
 #' shinyApp(ui, server)
@@ -204,40 +230,43 @@ renderRecogitotagsonly <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' ]'
 #' read_recogito(x)
 read_recogito <- function(x, text = character()){
+  default <- data.frame(id = character(), type = character(), chunk_text = character(), chunk_start = integer(), chunk_end = integer(), relation_from = character(), relation_to = character(), stringsAsFactors = FALSE)
+  default$label         <- list()
+  default$chunk_comment <- list()
   if(is.character(x)){
     x       <- jsonlite::fromJSON(x, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE, flatten = FALSE)
-    label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
-    target  <- lapply(x, FUN = function(x){
-      data <- x$target
-      if("selector" %in% names(data)){
-        data <- data.frame(chunk_text = data$selector[[1]]$exact, chunk_start = data$selector[[2]]$start, chunk_end = data$selector[[2]]$end, relation_from = NA_character_, relation_to = NA_character_, stringsAsFactors = FALSE)
-      }else{
-        data <- unlist(data, recursive = TRUE, use.names = FALSE)
-        data <- data.frame(chunk_text = NA_character_, chunk_start = NA_integer_, chunk_end = NA_integer_, relation_from = data[1], relation_to = data[2], stringsAsFactors = FALSE)
-      }
-      data
-    })
-    tags    <- lapply(label, FUN = function(x) x$value[x$purpose %in% "tagging"])
-    comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
-    out <- data.frame(id      = sapply(x, FUN = function(x) x$id),
-                      type    = sapply(target, FUN=function(x) ifelse(is.na(x$relation_from), "TAG", "RELATION")),
-                      chunk_text    = sapply(target, FUN=function(x) x$chunk_text),
-                      chunk_start   = sapply(target, FUN=function(x) x$chunk_start),
-                      chunk_end     = sapply(target, FUN=function(x) x$chunk_end),
-                      relation_from = sapply(target, FUN=function(x) x$relation_from),
-                      relation_to   = sapply(target, FUN=function(x) x$relation_to),
-                      stringsAsFactors = FALSE)
-    out$label   <- I(tags)
-    out$chunk_comment <- I(comment)
-
+    if(length(x) == 0){
+      out <- default
+    }else{
+      label   <- lapply(x, FUN = function(x) do.call(rbind, lapply(x$body, FUN=function(x) data.frame(value = x$value, purpose = x$purpose))))
+      target  <- lapply(x, FUN = function(x){
+        data <- x$target
+        if("selector" %in% names(data)){
+          data <- data.frame(chunk_text = data$selector[[1]]$exact, chunk_start = data$selector[[2]]$start, chunk_end = data$selector[[2]]$end, relation_from = NA_character_, relation_to = NA_character_, stringsAsFactors = FALSE)
+        }else{
+          data <- unlist(data, recursive = TRUE, use.names = FALSE)
+          data <- data.frame(chunk_text = NA_character_, chunk_start = NA_integer_, chunk_end = NA_integer_, relation_from = data[1], relation_to = data[2], stringsAsFactors = FALSE)
+        }
+        data
+      })
+      tags    <- lapply(label, FUN = function(x) x$value[x$purpose %in% "tagging"])
+      comment <- lapply(label, FUN = function(x) x$value[x$purpose %in% "commenting"])
+      out <- data.frame(id      = sapply(x, FUN = function(x) x$id),
+                        type    = sapply(target, FUN=function(x) ifelse(is.na(x$relation_from), "TAG", "RELATION")),
+                        chunk_text    = sapply(target, FUN=function(x) x$chunk_text),
+                        chunk_start   = sapply(target, FUN=function(x) x$chunk_start),
+                        chunk_end     = sapply(target, FUN=function(x) x$chunk_end),
+                        relation_from = sapply(target, FUN=function(x) x$relation_from),
+                        relation_to   = sapply(target, FUN=function(x) x$relation_to),
+                        stringsAsFactors = FALSE)
+      out$label   <- I(tags)
+      out$chunk_comment <- I(comment)
+    }
     out
   }else{
-    out <- data.frame(id = character(), type = character(), chunk_text = character(), chunk_start = integer(), chunk_end = integer(), relation_from = character(), relation_to = character())
-    out$label    <- list()
-    out$chunk_comment <- list()
+    out <- default
   }
-  out <- out[, c("id", "type", "label", "chunk_text", "chunk_start", "chunk_end", "relation_from",
-                 "relation_to", "chunk_comment"), drop = FALSE]
+  out <- out[, c("id", "type", "label", "chunk_text", "chunk_start", "chunk_end", "relation_from", "relation_to", "chunk_comment"), drop = FALSE]
   attr(out, "text") <- text
   out
 }

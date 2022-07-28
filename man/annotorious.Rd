@@ -7,7 +7,9 @@
 annotorious(
   inputId = "annotations",
   src,
-  tags = c("Cat", "Dog", "Person", "Other"),
+  tags = c(),
+  type = c("annotorious", "openseadragon", "openseadragon-notoolbar"),
+  quickselector = TRUE,
   width = NULL,
   height = NULL,
   elementId = NULL,
@@ -15,11 +17,15 @@ annotorious(
 )
 }
 \arguments{
-\item{inputId}{The input slot that will be used to access the value}
+\item{inputId}{character string with the name to use where annotations will be put into}
 
 \item{src}{character string with the image/url to annotate}
 
 \item{tags}{character vector of possible labels you want to use}
+
+\item{type}{either \code{'annotorious'}, \code{'openseadragon'}, \code{'openseadragon-notoolbar'} in order to allow zooming with openseadragon or not, with or without a toolbar}
+
+\item{quickselector}{logical indicating if for type \code{'openseadragon'} the possible tags should be shows as quick buttons to click. Defaults to \code{TRUE}.}
 
 \item{width}{passed on to \code{\link[htmlwidgets]{createWidget}}}
 
@@ -31,22 +37,9 @@ annotorious(
 }
 \value{
 An object of class htmlwidget as returned by \code{\link[htmlwidgets]{createWidget}}
-that will intelligently print itself into HTML in a variety of contexts including the R console,
-within R Markdown documents, and within Shiny output bindings.
 }
 \description{
 Functionality to label areas in images
-}
-\examples{
-url <- "https://www.w3schools.com/images/picture.jpg"
-annotorious(src = url)
-url <- paste("https://nl.wikipedia.org/wiki/",
-             "Hoofdpagina#/media/Bestand:Pamphlet_dutch_tulipomania_1637.jpg")
-url <- paste("https://upload.wikimedia.org/",
-             "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
-             sep = "")
-annotorious(src = url)
-annotorious(src = url, tags = c("Image", "Text", "Other"))
 }
 \seealso{
 \code{\link{annotorious-shiny}}
