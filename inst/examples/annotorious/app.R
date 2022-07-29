@@ -14,7 +14,6 @@ server <- function(input, output) {
     read_annotorious(input$annotations)
   })
 }
-shinyApp(ui, server)
 
 
 if(FALSE){
@@ -44,3 +43,5 @@ if(FALSE){
   image_crop(img, geometry_area(x = x$x, y = x$y, width = x$width, height = x$height))
   image_crop(img, geometry_area(x = x$x, y = x$y, width = x$width, height = x$height))
 }
+
+shinyApp(ui, server)
