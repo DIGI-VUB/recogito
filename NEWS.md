@@ -1,3 +1,10 @@
+### CHANGES IN recogito VERSION 0.2.1
+
+- Allow multiple documents to be annotated with text in recogito to cleanly updated
+  - recogitoOutput gains the arguments refresh, annotationMode, tags, rtags
+  allowing text updates, annotationMode(RELATIONS,ANNOTATION), annotation tags, 
+  and relations tags to be updated through the reactive component.
+
 ### CHANGES IN recogito VERSION 0.2.0
 
 - read_annotorious now extracts from x$target$selector instead of x$target[[1]]$value

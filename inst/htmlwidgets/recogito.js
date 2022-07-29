@@ -5,82 +5,59 @@ HTMLWidgets.widget({
     var formatter = function(annotation) {
       return "tag-".concat(annotation.body[0].value)
     }
+    var data = document.getElementById(el.id.concat("-data"));
+    var initData = JSON.parse(data.getAttribute("init-data"));
     var r = Recogito.init({
-      content: el.parentNode.id,
-      formatter: formatter,
-      readOnly: false
-    });
+                            content: el.parentNode.id,
+                            mode: initData.mode,
+                            formatter: formatter,
+                            widgets:['COMMENT',
+                                    { widget: 'TAG', vocabulary: initData.tags}
+                                    ],
+                            relationVocabulary: initData.rtags,
+                            readOnly: false                         
+                          });
+        function updateAnnotation(){
+           Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
+        function createAnnotation(){
+           Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
     return {
       renderValue: function(x) {
-        el.innerText = x.text;
-        r.setMode('ANNOTATION');
-        r.on('updateAnnotation', function(a) {
-          Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
-        });
-        r.on('createAnnotation', function(a) {
-          Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
-        });
-        r.on('deleteAnnotation', function(annotation) {
-          Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
-        });
-        r.clearAnnotations();
-        if(x.annotations != "{}" & x.annotations != '[""]'){
-            r.setAnnotations(JSON.parse(x.annotations))
-        }
-        Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
-        // Allow to switch between relation/annotation mode
-        var toggleModeBtn = document.getElementById(el.id.concat("-toggle"));
-        annotationMode = toggleModeBtn.innerHTML;
-        if (annotationMode === 'MODE: RELATIONS') {
-          annotationMode = 'RELATIONS';
-        } else  {
-          annotationMode = 'ANNOTATION';
-        }
-        toggleModeBtn.addEventListener('click', function() {
-          if (annotationMode === 'ANNOTATION') {
-            toggleModeBtn.innerHTML = 'MODE: RELATIONS';
-            annotationMode = 'RELATIONS';
-          } else  {
-            toggleModeBtn.innerHTML = 'MODE: ANNOTATION';
-            annotationMode = 'ANNOTATION';
+        r._environment.inputId=x.inputId;
+        if(x.refresh){
+          el.innerText = x.text;
+          r.off('updateAnnotation',updateAnnotation);
+          r.on('updateAnnotation', updateAnnotation);
+          r.off('createAnnotation',createAnnotation);
+          r.on('createAnnotation',createAnnotation);
+          r.clearAnnotations();
+          //TODO: verify annotations exist and are correctly formatted
+          //The tags can be misaligned when text contains multiple 
+          //spaces or special characters.
+          if(x.annotations!="{}" & x.annotations!='[""]'){
+            r.setAnnotations(JSON.parse(x.annotations));
           }
-          r.setMode(annotationMode);
-        });
-        // Quick selector widget showing buttons on top of the annotation widget
-        var tagSelectorWidget = function(args) {
-          // Triggers callbacks on user action
-          var addTag = function(evt) {
-            args.onAppendBody({
-              type: 'TextualBody',
-              purpose: 'tagging',
-              value: evt.target.dataset.tag
-            });
-          };
-          // Render the top buttons on top of the widget, using default shiny btn btn-default classes
-          var createButton = function(value) {
-            var button = document.createElement('button');
-            button.className = "btn btn-default";
-            button.dataset.tag = value;
-            button.textContent = value;
-            button.addEventListener('click', addTag);
-            return button;
-          };
-          var container = document.createElement('div');
-          container.className = 'tagset-quickselector-widget';
-          tagset = x.tags;
-          for (let i = 0; i < tagset.length; i++) {
-            container.appendChild(createButton(tagset[i]));
+          Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
+        if(x.annotations!="{}" & x.annotations!='[""]'){
+          r.setAnnotations(JSON.parse(x.annotations));
+          Shiny.setInputValue(r._environment.inputId, JSON.stringify(r.getAnnotations()));
+        }
+        if(x.annotationMode === 'RELATIONS'){
+            r.setMode(x.annotationMode)
+        }else{
+          if(x.annotationMode === 'ANNOTATION'){
+            r.setMode(x.annotationMode)
           }
-          return container;
-        };
-        r.widgets = [
-            tagSelectorWidget,
-            { widget: 'COMMENT' },
-            { widget: 'TAG', vocabulary: x.tags }
-          ];
+        }
+        //var toggleModeBtn = document.getElementById('toggle-mode');
+        //r.refresh();
       },
       resize: function(width, height) {
       }
     };
+  s: r
   }
 });
