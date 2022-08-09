@@ -13,7 +13,6 @@ HTMLWidgets.widget({
     return {
       renderValue: function(x) {
         el.innerText = x.text;
-        r.setMode('ANNOTATION');
         r.on('updateAnnotation', function(a) {
           Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
         });
@@ -30,6 +29,8 @@ HTMLWidgets.widget({
         Shiny.setInputValue(x.inputId, JSON.stringify(r.getAnnotations()));
         // Allow to switch between relation/annotation mode
         var toggleModeBtn = document.getElementById(el.id.concat("-toggle"));
+        r.setMode('ANNOTATION');
+        toggleModeBtn.innerHTML = 'MODE: ANNOTATION';
         annotationMode = toggleModeBtn.innerHTML;
         if (annotationMode === 'MODE: RELATIONS') {
           annotationMode = 'RELATIONS';
