@@ -3,13 +3,6 @@ This R package is distributed under the BSD-3 license.
 The package also includes 3rd party open source software components and data. The following is a list of these components. The full copies of the license agreements of these components are included below.
 
 ------------------------------------------------------------------------------------------------------
-- file inst/examples/Pamphlet_dutch_tulipomania_1637.jpg
-  Based on https://nl.wikipedia.org/wiki/Bestand:Pamphlet_dutch_tulipomania_1637.jpg
-------------------------------------------------------------------------------------------------------
-
-Image file in the Public Domain
-
-------------------------------------------------------------------------------------------------------
 - recogito-js (Files at inst/htmlwidgets/lib/recogito-js-1.7.0
   Based on release 1.7.1 https://github.com/recogito/recogito-js/releases/tag/v1.7.1
 ------------------------------------------------------------------------------------------------------
@@ -167,4 +160,18 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
+
+------------------------------------------------------------------------------------------------------
+- file inst/examples/Pamphlet_dutch_tulipomania_1637.jpg
+  Based on https://nl.wikipedia.org/wiki/Bestand:Pamphlet_dutch_tulipomania_1637.jpg
+------------------------------------------------------------------------------------------------------
+
+Image file in the Public Domain
+
+------------------------------------------------------------------------------------------------------
+- file inst/examples/Cat_and_dog_standoff_283926784260%29.jpg
+  Based on https://commons.wikimedia.org/wiki/File:Cat_and_dog_standoff_(3926784260).jpg
+------------------------------------------------------------------------------------------------------
+
+Image file by Peretz Partensky, released under the Creative Commons Attribution-Share Alike 2.0 Generic licence (https://creativecommons.org/licenses/by-sa/2.0/deed.en)
 

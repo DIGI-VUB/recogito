@@ -22,10 +22,14 @@ Extract the areas of interests of an image
 if(require(opencv) && require(magick))
 \{
 }
-
 library(opencv)
 library(magick)
 data(openseadragon_areas)
+\dontshow{
+  url <- system.file(package = "recogito", "examples",
+                     "Cat_and_dog_standoff_(3926784260).jpg")
+  attr(openseadragon_areas, "src") <- url
+}
 url  <- attr(openseadragon_areas, "src")
 img  <- ocv_read(url)
 

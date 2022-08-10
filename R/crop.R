@@ -21,9 +21,13 @@ NULL
 #' if(require(opencv))
 #' \{
 #' }
-#'
 #' library(opencv)
 #' data(openseadragon_areas)
+#' \dontshow{
+#'   url <- system.file(package = "recogito", "examples",
+#'                      "Cat_and_dog_standoff_(3926784260).jpg")
+#'   attr(openseadragon_areas, "src") <- url
+#' }
 #' url  <- attr(openseadragon_areas, "src")
 #' img  <- ocv_read(url)
 #' bbox <- ocv_info(img)
@@ -38,7 +42,6 @@ NULL
 #' ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
 #' area <- x[3, ]
 #' ocv_rectangle(img, x = area$x, y = area$y, width = area$width, height = area$height)
-#'
 #' \dontshow{
 #' \}
 #' }
@@ -115,10 +118,14 @@ ocv_crop_annotorious <- function(data, bbox){
 #' if(require(opencv) && require(magick))
 #' \{
 #' }
-#'
 #' library(opencv)
 #' library(magick)
 #' data(openseadragon_areas)
+#' \dontshow{
+#'   url <- system.file(package = "recogito", "examples",
+#'                      "Cat_and_dog_standoff_(3926784260).jpg")
+#'   attr(openseadragon_areas, "src") <- url
+#' }
 #' url  <- attr(openseadragon_areas, "src")
 #' img  <- ocv_read(url)
 #'
