@@ -100,6 +100,11 @@ library(recogito)
 url <- paste("https://upload.wikimedia.org/",
              "wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
              sep = "")
+\dontshow{
+url <- system.file(package = "recogito", "examples", "Pamphlet_dutch_tulipomania_1637.jpg")
+addResourcePath(prefix = "img", directoryPath = dirname(url))
+url <- sprintf("img/\%s", basename(url))
+}
 ui <- fluidPage(annotoriousOutput(outputId = "anno", height = "600px"),
                 tags$h3("Results"),
                 verbatimTextOutput(outputId = "annotation_result"))
@@ -122,6 +127,13 @@ urls <- paste("https://upload.wikimedia.org/",
               c("wikipedia/commons/a/a0/Pamphlet_dutch_tulipomania_1637.jpg",
                 "wikipedia/commons/6/64/Cat_and_dog_standoff_\%283926784260\%29.jpg"),
               sep = "")
+\dontshow{
+urls <- file.path(system.file(package = "recogito", "examples"),
+                  c("Pamphlet_dutch_tulipomania_1637.jpg",
+                    "Cat_and_dog_standoff_(3926784260).jpg"))
+addResourcePath(prefix = "img", directoryPath = head(dirname(urls), n = 1))
+urls <- sprintf("img/\%s", basename(urls))
+}
 ui <- fluidPage(actionButton(inputId = "ui_switch", label = "Sample image"),
                 annotoriousOutput(outputId = "anno", height = "600px"),
                 tags$h3("Results"),
