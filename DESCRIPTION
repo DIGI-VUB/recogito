@@ -2,7 +2,7 @@ Package: recogito
 Title: Interactive Annotation of Text and Images
 Version: 0.2.1
 Authors@R: c(
-    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jan.wijffels@vub.be'), 
+    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jwijffels@bnosac.be'), 
     person('Vrije Universiteit Brussel - DIGI: Brussels Platform for Digital Humanities', role = 'cph'),
     person('Pelagios Network', role = 'cph', comment = "code in inst/htmlwidgets/lib"),
     person('CodePlex Foundation', role = 'cph', comment = "code in inst/htmlwidgets/lib/openseadragon-2.4.2"),
