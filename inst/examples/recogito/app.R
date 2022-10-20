@@ -1,5 +1,3 @@
-
-
 txt       <- "Josh went to the bakery in Brussels.\nWhat an adventure!"
 
 library(shiny)
